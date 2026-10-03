@@ -1,0 +1,669 @@
+Build the complete frontend of a production-style farmer-focused web application called **AI Khet Saathi**.
+
+IMPORTANT:
+
+* Build ONLY the frontend in this phase.
+* Use React.
+* Do NOT create Django/backend code.
+* Do NOT depend on a real API.
+* Use realistic static/mock JSON data for all frontend testing.
+* The frontend must be fully functional and interactive using mock data.
+* Later, this frontend will be connected to a Django REST Framework backend.
+* Keep the frontend architecture API-ready so replacing mock services with real APIs is easy.
+* Use reusable components and clean folder structure.
+* Do not create a simple demo or landing page. Build the actual working application UI.
+
+==================================================
+PROJECT PURPOSE
+===============
+
+AI Khet Saathi helps farmers maintain a digital record of farming activities and remember important dates.
+
+The farmer can manage:
+
+* Multiple farms
+* Multiple crops
+* Sowing dates
+* Irrigation records
+* Spray records
+* Fertilizer records
+* Pest/disease observations
+* Other farming activities
+* Expenses
+* Reminders
+* Activity history
+* Crop summaries
+* AI assistant
+
+The UI must be extremely simple and mobile-friendly.
+
+The design should feel friendly and trustworthy rather than like a complicated enterprise dashboard.
+
+==================================================
+TECH STACK
+==========
+
+Use:
+
+* React
+* React Router
+* JavaScript or TypeScript
+* CSS / Tailwind CSS if appropriate
+* Reusable components
+* Local mock data/service layer
+* Form validation
+* Responsive design
+* Icons
+
+Do not hardcode data directly inside every component.
+
+Create a mock API/service layer such as:
+
+src/
+api/
+mockApi.js
+
+The UI should call functions such as:
+
+getFarms()
+getCrops()
+getActivities()
+getReminders()
+getExpenses()
+askAI()
+createActivity()
+createReminder()
+createExpense()
+
+Later these functions can be replaced with Django API calls.
+
+==================================================
+USER ROLES
+==========
+
+Create UI for:
+
+1. Farmer
+2. Admin
+
+Focus primarily on the Farmer experience.
+
+==================================================
+FARMER SCREENS
+==============
+
+Create these pages:
+
+1. Login
+2. Register
+3. Forgot Password
+4. Farmer Dashboard
+5. My Farms
+6. Farm Details
+7. My Crops
+8. Crop Details
+9. Add Activity
+10. Activity History
+11. Activity Details
+12. Edit Activity
+13. Reminders
+14. Add Reminder
+15. Expenses
+16. Add Expense
+17. Expense Reports
+18. AI Khet Saathi
+19. AI Chat History
+20. Notifications
+21. Profile
+22. Settings
+23. Language Selection
+24. Help / FAQ
+
+==================================================
+DASHBOARD
+=========
+
+Dashboard should show:
+
+* Welcome message
+* Number of farms
+* Number of active crops
+* Today's activities
+* Upcoming reminders
+* Last farming activity
+* Total current-season expenses
+* Quick action buttons
+
+Quick actions:
+
+[ + Add Activity ]
+[ + Add Expense ]
+[ 🔔 Reminder ]
+[ 🤖 Ask Khet Saathi ]
+
+Show today's important reminder prominently.
+
+Example:
+
+"🌾 Soybean — Farm 1"
+
+"Last activity: Spray — 25 June"
+
+"Next reminder: 2 July"
+
+==================================================
+FARM MANAGEMENT
+===============
+
+Farmer can:
+
+* Add farm
+* Edit farm
+* Delete farm
+* View farm
+* Add multiple farms
+
+Farm fields:
+
+* Farm name
+* Village/location
+* Area
+* Unit: acre/hectare
+* Optional notes
+* Optional image
+
+Farm cards should display:
+
+Farm name
+Area
+Active crops
+Latest activity
+
+==================================================
+CROP MANAGEMENT
+===============
+
+Farmer can:
+
+* Add crop
+* Edit crop
+* Delete crop
+* View crop
+* Archive crop
+
+Crop fields:
+
+* Crop name
+* Farm
+* Variety
+* Season
+* Area
+* Sowing date
+* Expected harvest date
+* Notes
+
+Crop details page should show:
+
+* Crop summary
+* Sowing date
+* Activity timeline
+* Upcoming reminders
+* Expenses
+* Recent activities
+* Total expenses
+
+==================================================
+ACTIVITY SYSTEM
+===============
+
+Activity types:
+
+1. Sowing
+2. Irrigation
+3. Spray
+4. Fertilizer
+5. Pest/Disease
+6. Weeding
+7. Harvest
+8. Other
+
+Add Activity form:
+
+* Farm
+* Crop
+* Activity type
+* Date
+* Product name
+* Quantity
+* Unit
+* Notes
+* Optional image
+* Create reminder toggle
+* Reminder date
+
+Make forms simple.
+
+For Spray:
+
+* Product name
+* Quantity
+* Unit
+* Spray date
+* Reason
+* Notes
+
+Do NOT automatically recommend pesticide dosage or treatment.
+
+The app is a record/reminder system.
+
+==================================================
+ACTIVITY TIMELINE
+=================
+
+Create a beautiful timeline:
+
+15 June
+🌱 Sowing
+
+20 June
+💧 Irrigation
+
+25 June
+🧪 Spray
+
+30 June
+🌾 Fertilizer
+
+2 July
+🔔 Reminder
+
+Allow filtering by:
+
+* Crop
+* Activity type
+* Date range
+
+==================================================
+REMINDER SYSTEM
+===============
+
+Create:
+
+* Upcoming reminders
+* Today's reminders
+* Completed reminders
+* Overdue reminders
+
+Reminder fields:
+
+* Title
+* Crop
+* Activity
+* Reminder date
+* Notes
+* Status
+
+Actions:
+
+* Complete
+* Snooze
+* Edit
+* Delete
+
+Show overdue reminders clearly but without scary language.
+
+Example:
+
+"⏰ Irrigation reminder"
+
+"Soybean — Farm 1"
+
+"Due today"
+
+==================================================
+EXPENSE MANAGEMENT
+==================
+
+Expense categories:
+
+* Seeds
+* Fertilizer
+* Spray
+* Labour
+* Irrigation
+* Equipment
+* Transport
+* Other
+
+Expense fields:
+
+* Crop
+* Category
+* Amount
+* Date
+* Description
+* Optional receipt image
+
+Display:
+
+* Total expenses
+* Crop-wise expenses
+* Category-wise expenses
+* Monthly expenses
+
+Use charts where appropriate.
+
+==================================================
+AI KHET SAATHI
+==============
+
+Create a complete AI assistant UI.
+
+Do not connect to a real AI API yet.
+
+Use mock AI responses.
+
+Chat examples:
+
+User:
+"Maine soybean mein last spray kab kiya tha?"
+
+AI:
+"Your latest recorded soybean spray was on 25 June 2026."
+
+User:
+"Is month maine kya kiya?"
+
+AI:
+"You recorded 4 activities this month: 1 irrigation, 1 spray, 1 fertilizer application and 1 pest observation."
+
+User:
+"Mera total expense kitna hai?"
+
+AI:
+"Your recorded soybean expenses this season are ₹12,500."
+
+Include suggested questions:
+
+* Last spray kab kiya?
+* Last irrigation kab hui?
+* Is month kya activities hui?
+* Total expense kitna hai?
+* Next reminder kya hai?
+
+==================================================
+AI ACTIVITY ENTRY
+=================
+
+Create a special "Tell Khet Saathi" input.
+
+Example:
+
+Farmer types:
+
+"Aaj subah soybean ko paani diya."
+
+Mock AI should return:
+
+Activity: Irrigation
+Crop: Soybean
+Date: Today
+
+Show:
+
+"AI understood this activity."
+
+Buttons:
+
+[ Save Activity ]
+[ Edit ]
+[ Cancel ]
+
+Do not directly save without confirmation.
+
+==================================================
+PHOTO UPLOAD UI
+===============
+
+Allow image upload for:
+
+* Farm image
+* Activity image
+* Product image
+* Expense receipt
+
+Frontend should show:
+
+* Image preview
+* Remove image
+* Upload state
+* Error state
+
+For AI/OCR, use mock extracted information for now.
+
+==================================================
+NOTIFICATIONS
+=============
+
+Create notification center.
+
+Examples:
+
+"🔔 Soybean irrigation reminder is due today."
+
+"📅 Your crop activity record has not been updated for 7 days."
+
+"💰 Monthly expense summary is ready."
+
+==================================================
+LANGUAGE SUPPORT
+================
+
+Prepare UI for:
+
+* English
+* Hindi
+* Marathi
+
+For this phase, create the language selector and translation structure.
+
+Actual translation can use mock/static translation objects.
+
+Avoid putting language-specific text directly throughout components.
+
+==================================================
+ADMIN UI
+========
+
+Create a basic Admin dashboard.
+
+Admin can see:
+
+* Total farmers
+* Total farms
+* Total crops
+* Total activities
+* Total reminders
+* Active users
+
+Admin pages:
+
+* Farmers
+* Farms
+* Crops
+* Activities
+* Reports
+* Notifications
+
+Use mock data.
+
+==================================================
+UX REQUIREMENTS
+===============
+
+IMPORTANT:
+
+The target user is a normal farmer, not a software engineer.
+
+Therefore:
+
+* Large buttons
+* Simple words
+* Minimal typing
+* Clear icons
+* Mobile-first
+* Good contrast
+* Simple navigation
+* Avoid complicated forms
+* Show confirmation before destructive actions
+* Friendly error messages
+* Loading states
+* Empty states
+* Success messages
+* Confirmation dialogs
+
+Example empty state:
+
+"No farming activities recorded yet."
+
+Button:
+
+"+ Add First Activity"
+
+==================================================
+RESPONSIVE DESIGN
+=================
+
+The application must work properly on:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+
+Mobile experience is the priority.
+
+Use bottom navigation or a suitable mobile navigation pattern.
+
+==================================================
+MOCK DATA
+=========
+
+Create realistic mock data.
+
+Example farmer:
+
+Name: Ramesh Patil
+
+Farms:
+
+Farm 1:
+Name: Main Farm
+Area: 2 acres
+Location: Satara
+
+Crop:
+Soybean
+Sowing date: 15 June 2026
+
+Activities:
+
+15 June - Sowing
+20 June - Irrigation
+25 June - Spray
+30 June - Fertilizer
+
+Expenses:
+
+Seeds: ₹2500
+Fertilizer: ₹3200
+Spray: ₹1800
+Labour: ₹4000
+Irrigation: ₹1000
+
+Create enough mock records to properly test:
+
+* filters
+* sorting
+* charts
+* reminders
+* timeline
+* AI responses
+* dashboard statistics
+
+==================================================
+ERROR / LOADING STATES
+======================
+
+Every important page must have:
+
+* Loading state
+* Empty state
+* Error state
+* Success state
+
+Simulate API delay in mock service functions so the UI behaves like a real application.
+
+==================================================
+CODE QUALITY
+============
+
+Use:
+
+* Reusable components
+* Reusable forms
+* Reusable modal
+* Reusable cards
+* Reusable buttons
+* Reusable tables
+* Reusable timeline
+* Reusable notification components
+* Central mock API/service
+* Central constants
+* Central translation files
+
+Avoid duplicated code.
+
+Do not put everything into App.jsx.
+
+==================================================
+FINAL REQUIREMENT
+=================
+
+After implementation:
+
+1. Run the React project.
+2. Verify every route.
+3. Verify navigation.
+4. Verify forms.
+5. Verify mock CRUD interactions.
+6. Verify filters.
+7. Verify reminders.
+8. Verify charts.
+9. Verify AI mock chat.
+10. Verify responsive mobile UI.
+11. Fix console errors.
+12. Fix broken links/routes.
+13. Make sure the application works completely using mock data.
+
+The final result should look like a real usable farmer application, not a college demo.
+
+Do not start Django yet.
+Only complete and test the React frontend in this phase.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[AI Khet Saathi - Smart Digital Farming Record & AI Assistant](http://localhost:3000/crops/crop-1) == Total Crop Expenses
+₹12,500 is how to increase edit funtionality . first activites create time give per activity expence/cost this cost ad the crop expense and activity add one more feature harvest how menay ammout gain tthis amount show crop profit and also farm inside show profit amount and expnese amount 

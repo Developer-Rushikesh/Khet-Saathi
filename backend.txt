@@ -1,0 +1,833 @@
+Build the complete backend for the **AI Khet Saathi** application.
+
+IMPORTANT:
+
+* Backend must be built separately from the React frontend.
+* Use Django + Django REST Framework.
+* The existing React frontend will consume these APIs later.
+* Do NOT build React in this phase.
+* Build a production-style REST API.
+* Use PostgreSQL.
+* Use environment variables for secrets.
+* Include authentication, permissions, validation, database relationships, reminders, notifications and AI integration.
+* The backend must be fully functional, not just model definitions.
+
+==================================================
+PROJECT PURPOSE
+===============
+
+AI Khet Saathi is a farmer-friendly farm diary and reminder platform.
+
+Farmers can:
+
+* Manage farms
+* Manage crops
+* Record farming activities
+* Record spray/fertilizer/irrigation activities
+* Track expenses
+* Create reminders
+* View activity history
+* Ask AI questions about their own farm records
+* Use natural language to create activity drafts
+* Upload images
+* View reports
+
+AI should primarily operate on verified data stored in the user's database.
+
+==================================================
+TECH STACK
+==========
+
+Backend:
+
+* Python
+* Django
+* Django REST Framework
+* PostgreSQL
+* JWT authentication
+* django-cors-headers
+* Celery
+* Redis
+* Pillow
+
+AI:
+
+* LLM API using environment variable API key
+* Structured JSON output where appropriate
+
+Documentation:
+
+* OpenAPI / Swagger
+
+Testing:
+
+* Django TestCase / pytest if configured
+* DRF API tests
+
+==================================================
+PROJECT STRUCTURE
+=================
+
+Use a clean structure such as:
+
+backend/
+manage.py
+
+```
+config/
+    settings/
+    urls.py
+    wsgi.py
+    asgi.py
+
+apps/
+    accounts/
+    farms/
+    crops/
+    activities/
+    reminders/
+    expenses/
+    notifications/
+    ai_assistant/
+    reports/
+
+requirements.txt
+.env.example
+README.md
+```
+
+Keep applications separated by responsibility.
+
+==================================================
+AUTHENTICATION
+==============
+
+Implement:
+
+* Register
+* Login
+* Logout
+* JWT access token
+* JWT refresh token
+* Profile
+* Change password
+* Forgot password workflow structure
+
+User fields:
+
+* Name
+* Email
+* Phone optional
+* Preferred language
+* Role
+* Created date
+
+Roles:
+
+* Farmer
+* Admin
+
+Farmers can only access their own data.
+
+Admins can access authorized administrative data.
+
+==================================================
+DATABASE MODELS
+===============
+
+Create proper relational models.
+
+Farm:
+
+* owner
+* name
+* village
+* location
+* area
+* unit
+* notes
+* created_at
+* updated_at
+
+Crop:
+
+* farm
+* crop_name
+* variety
+* season
+* area
+* sowing_date
+* expected_harvest_date
+* status
+* notes
+* created_at
+* updated_at
+
+Activity:
+
+* crop
+* activity_type
+* activity_date
+* product_name
+* quantity
+* unit
+* reason
+* notes
+* image
+* created_by
+* created_at
+* updated_at
+
+Activity types:
+
+SOWING
+IRRIGATION
+SPRAY
+FERTILIZER
+PEST_DISEASE
+WEEDING
+HARVEST
+OTHER
+
+Reminder:
+
+* farmer
+* crop
+* activity
+* title
+* reminder_date
+* notes
+* status
+* created_at
+* updated_at
+
+Expense:
+
+* crop
+* category
+* amount
+* expense_date
+* description
+* receipt_image
+* created_at
+* updated_at
+
+Notification:
+
+* user
+* title
+* message
+* notification_type
+* read
+* created_at
+
+AIConversation:
+
+* user
+* title
+* created_at
+* updated_at
+
+AIMessage:
+
+* conversation
+* role
+* message
+* created_at
+
+==================================================
+DATABASE CONSTRAINTS
+====================
+
+Add appropriate:
+
+* Foreign keys
+* indexes
+* unique constraints where needed
+* validation
+* decimal fields for money
+* date validation
+
+Prevent users from accessing another farmer's farms, crops, activities or expenses.
+
+==================================================
+REST API
+========
+
+Create REST APIs for:
+
+Authentication:
+
+POST /api/auth/register/
+POST /api/auth/login/
+POST /api/auth/refresh/
+GET /api/auth/profile/
+
+Farms:
+
+GET /api/farms/
+POST /api/farms/
+GET /api/farms/{id}/
+PUT /api/farms/{id}/
+PATCH /api/farms/{id}/
+DELETE /api/farms/{id}/
+
+Crops:
+
+GET /api/crops/
+POST /api/crops/
+GET /api/crops/{id}/
+PUT /api/crops/{id}/
+PATCH /api/crops/{id}/
+DELETE /api/crops/{id}/
+
+Activities:
+
+GET /api/activities/
+POST /api/activities/
+GET /api/activities/{id}/
+PUT /api/activities/{id}/
+PATCH /api/activities/{id}/
+DELETE /api/activities/{id}/
+
+Reminders:
+
+GET /api/reminders/
+POST /api/reminders/
+PATCH /api/reminders/{id}/
+DELETE /api/reminders/{id}/
+
+Expenses:
+
+GET /api/expenses/
+POST /api/expenses/
+GET /api/expenses/{id}/
+PUT /api/expenses/{id}/
+DELETE /api/expenses/{id}/
+
+Notifications:
+
+GET /api/notifications/
+PATCH /api/notifications/{id}/read/
+
+Reports:
+
+GET /api/reports/dashboard/
+GET /api/reports/crop/{id}/
+GET /api/reports/expenses/
+
+==================================================
+FILTERING
+=========
+
+Activities must support:
+
+* crop
+* activity_type
+* date_from
+* date_to
+
+Expenses:
+
+* crop
+* category
+* date_from
+* date_to
+
+Reminders:
+
+* today
+* upcoming
+* overdue
+* completed
+
+Use DRF filtering/pagination appropriately.
+
+==================================================
+AI ASSISTANT
+============
+
+Build the AI assistant as a separate Django application.
+
+Endpoint:
+
+POST /api/ai/chat/
+
+Request:
+
+{
+"message": "Maine soybean mein last spray kab kiya tha?"
+}
+
+Backend should:
+
+1. Authenticate the farmer.
+2. Understand the user's intent.
+3. Identify relevant farm/crop/activity data.
+4. Query the database.
+5. Provide only relevant user-owned data to the AI.
+6. Generate a simple answer.
+7. Return the answer to React.
+8. Store the conversation.
+
+==================================================
+AI SAFETY / DATA RULE
+=====================
+
+IMPORTANT:
+
+AI must NOT invent farm history.
+
+If data does not exist:
+
+"The app does not have a recorded activity for this."
+
+Do not make up dates.
+
+The AI should clearly distinguish:
+
+* Stored farm data
+* AI-generated explanation
+* General information
+
+For questions involving pesticide dosage, disease treatment or agricultural chemical recommendations, do not invent medical/agricultural instructions.
+
+Prefer:
+
+"I don't have verified information for this recommendation. Please check the product label or consult a qualified agricultural professional."
+
+The initial application is primarily a farm record and reminder assistant.
+
+==================================================
+AI QUESTIONS
+============
+
+Support questions such as:
+
+* Last spray date
+* Last irrigation date
+* Last fertilizer activity
+* Activities this month
+* Activities for a crop
+* Total crop expenses
+* Expense by category
+* Upcoming reminders
+* Overdue reminders
+* Farm summary
+* Crop activity summary
+
+Examples:
+
+"Maine soybean mein last spray kab kiya?"
+
+"Is mahine maine kya kya kiya?"
+
+"Mera soybean ka total kharcha kitna hai?"
+
+"Next reminder kya hai?"
+
+"Last irrigation kab hui thi?"
+
+==================================================
+NATURAL LANGUAGE ACTIVITY CREATION
+==================================
+
+Create endpoint:
+
+POST /api/ai/parse-activity/
+
+Input:
+
+{
+"message": "Aaj subah soybean ko paani diya."
+}
+
+AI should return structured data:
+
+{
+"activity_type": "IRRIGATION",
+"crop_name": "Soybean",
+"activity_date": "2026-10-03",
+"confidence": 0.95,
+"notes": "Morning irrigation"
+}
+
+IMPORTANT:
+
+Do NOT automatically save the activity.
+
+Return it as a draft.
+
+React will show:
+
+"AI understood this activity."
+
+Then user confirms.
+
+After confirmation:
+
+POST /api/activities/
+
+creates the actual database record.
+
+==================================================
+REMINDER ENGINE
+===============
+
+Implement reminder functionality.
+
+A farmer can create:
+
+* One-time reminders
+* Activity-based reminders
+
+Use Celery + Redis for scheduled background tasks.
+
+Create scheduled tasks that:
+
+* Find reminders due today.
+* Find overdue reminders.
+* Generate notifications.
+* Avoid duplicate notifications.
+
+Reminder statuses:
+
+PENDING
+COMPLETED
+SNOOZED
+CANCELLED
+
+==================================================
+NOTIFICATIONS
+=============
+
+Create notification service.
+
+Examples:
+
+"Soybean irrigation reminder is due today."
+
+"Your spray follow-up reminder is due today."
+
+"Your monthly farm summary is ready."
+
+Support:
+
+* In-app notifications
+
+Keep architecture ready for:
+
+* Email
+* SMS
+* WhatsApp
+
+Do not require these external services initially.
+
+==================================================
+EXPENSE REPORTS
+===============
+
+Backend should calculate:
+
+* Total expenses
+* Crop-wise expenses
+* Category-wise expenses
+* Monthly expenses
+
+Do calculations from database records.
+
+Do not let AI calculate financial totals when backend can calculate them accurately.
+
+==================================================
+DASHBOARD API
+=============
+
+Create:
+
+GET /api/reports/dashboard/
+
+Return:
+
+* total farms
+* active crops
+* today's activities
+* upcoming reminders
+* overdue reminders
+* total expenses
+* latest activities
+* recent notifications
+
+==================================================
+FILE UPLOADS
+============
+
+Support image uploads for:
+
+* Farm
+* Activity
+* Expense receipt
+
+Validate:
+
+* file type
+* file size
+
+Use Pillow where required.
+
+Do not trust user-supplied file names.
+
+==================================================
+MULTI-LANGUAGE READY
+====================
+
+Store user preferred language:
+
+en
+hi
+mr
+
+Backend responses can remain English initially, but architecture should allow localization later.
+
+AI should be able to understand:
+
+English
+Hindi
+Hinglish
+Marathi
+
+Example:
+
+"Maine aaj soybean ko paani diya."
+
+should be understood as irrigation activity.
+
+==================================================
+ADMIN
+=====
+
+Configure Django admin for:
+
+* Users
+* Farms
+* Crops
+* Activities
+* Reminders
+* Expenses
+* Notifications
+* AI conversations
+
+Add useful filters/search fields.
+
+==================================================
+SECURITY
+========
+
+Implement:
+
+* JWT authentication
+* Permission classes
+* Object-level ownership checks
+* CORS configuration
+* CSRF considerations
+* Environment variables
+* Secret key protection
+* Secure upload validation
+* Input validation
+* Rate limiting/throttling for AI endpoints if practical
+
+Never expose:
+
+* AI API keys
+* database credentials
+* Django secret key
+
+==================================================
+API DOCUMENTATION
+=================
+
+Generate Swagger/OpenAPI documentation.
+
+Document:
+
+* authentication
+* request bodies
+* response examples
+* errors
+* permissions
+
+==================================================
+TESTING
+=======
+
+Write tests for:
+
+Authentication
+
+* registration
+* login
+* invalid credentials
+
+Farm:
+
+* create
+* update
+* delete
+* ownership
+
+Crop:
+
+* create
+* filtering
+
+Activities:
+
+* create
+* filtering
+* date filtering
+* ownership
+
+Reminders:
+
+* create
+* due status
+* completion
+
+Expenses:
+
+* calculations
+* filtering
+
+AI:
+
+* authentication required
+* database-grounded response
+* no-data response
+* activity parsing
+
+Security:
+
+* Farmer A cannot access Farmer B's data.
+
+==================================================
+ERROR HANDLING
+==============
+
+Return consistent JSON errors.
+
+Example:
+
+{
+"success": false,
+"message": "Farm not found."
+}
+
+Use proper HTTP status codes:
+
+200
+201
+204
+400
+401
+403
+404
+409
+429
+500
+
+Do not expose internal stack traces in production responses.
+
+==================================================
+ENVIRONMENT VARIABLES
+=====================
+
+Create .env.example with:
+
+SECRET_KEY=
+DEBUG=
+DATABASE_URL=
+
+AI_API_KEY=
+
+REDIS_URL=
+
+ALLOWED_HOSTS=
+
+CORS_ALLOWED_ORIGINS=
+
+Do not commit actual secrets.
+
+==================================================
+DATABASE / MIGRATIONS
+=====================
+
+Create:
+
+* migrations
+* seed/mock data command
+
+Create a Django management command such as:
+
+python manage.py seed_demo_data
+
+It should create sample:
+
+* farmer
+* farms
+* crops
+* activities
+* reminders
+* expenses
+
+==================================================
+README
+======
+
+Create a detailed README containing:
+
+1. Project overview
+2. Features
+3. Architecture
+4. Tech stack
+5. Installation
+6. Virtual environment
+7. PostgreSQL setup
+8. Redis setup
+9. Environment variables
+10. Migrations
+11. Demo data
+12. Running server
+13. Celery worker
+14. API documentation
+15. Authentication
+16. AI configuration
+17. API examples
+18. Testing
+19. Production deployment notes
+
+==================================================
+FINAL VALIDATION
+================
+
+After implementation:
+
+1. Run migrations.
+2. Create demo data.
+3. Start Django server.
+4. Verify authentication.
+5. Verify every major API endpoint.
+6. Verify permissions.
+7. Verify farmer data isolation.
+8. Verify filters.
+9. Verify reminders.
+10. Verify expense calculations.
+11. Verify AI endpoints.
+12. Verify activity parsing.
+13. Verify Swagger.
+14. Run automated tests.
+15. Fix errors.
+16. Ensure no secrets are committed.
+17. Ensure React can consume the API through CORS.
+
+The final backend must be a complete working Django REST API suitable for connecting to the previously created React frontend.
+
+Do NOT build frontend in this phase.
