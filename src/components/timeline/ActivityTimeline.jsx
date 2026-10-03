@@ -92,8 +92,26 @@ export const ActivityTimeline = ({ activities = [], crops = [], onSelectActivity
                       </div>
                       <h4 className="text-base font-bold text-slate-900">{act.type}</h4>
                       <p className="text-xs text-slate-600 font-medium mt-0.5">
-                        {act.productName} ({act.quantity} {act.unit})
+                        {act.productName ? `${act.productName} (${act.quantity} ${act.unit})` : `${act.quantity} ${act.unit}`}
                       </p>
+                      
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
+                        {parseFloat(act.personCount) > 0 && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 text-[11px] font-bold border border-sky-200">
+                            👥 {act.personCount} Workers {act.costPerPerson ? `(@ ₹${act.costPerPerson})` : ''}
+                          </span>
+                        )}
+                        {parseFloat(act.cost) > 0 && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[11px] font-bold border border-emerald-200">
+                            💸 Expense: ₹{parseFloat(act.cost).toLocaleString()}
+                          </span>
+                        )}
+                        {parseFloat(act.income) > 0 && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[11px] font-bold border border-amber-200">
+                            💰 Sale: ₹{parseFloat(act.income).toLocaleString()}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${config.color}`}>

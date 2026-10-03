@@ -21,6 +21,9 @@ export const EditActivity = () => {
     productName: '',
     quantity: '',
     unit: '',
+    personCount: '',
+    costPerPerson: '',
+    materialCost: '',
     cost: '',
     income: '',
     notes: '',
@@ -39,6 +42,9 @@ export const EditActivity = () => {
             productName: item.productName || '',
             quantity: item.quantity || '',
             unit: item.unit || '',
+            personCount: item.personCount || '',
+            costPerPerson: item.costPerPerson || '',
+            materialCost: item.materialCost || '',
             cost: item.cost || '',
             income: item.income || '',
             notes: item.notes || '',
@@ -119,23 +125,77 @@ export const EditActivity = () => {
             />
           </div>
 
-          <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              label="Activity Cost / Expense (₹)"
-              type="number"
-              value={formData.cost}
-              onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
-              placeholder="e.g. 1800"
-            />
-            {formData.type === 'Harvest' && (
+          {/* Worker / Person Cost Tracking Section */}
+          <div className="p-4 bg-sky-50/70 border border-sky-200 rounded-2xl space-y-3">
+            <span className="text-xs font-extrabold text-sky-900 uppercase tracking-wide flex items-center justify-between">
+              <span>👥 Workers / Laborers (व्यक्ती संख्या व दर)</span>
+              {(parseFloat(formData.personCount) > 0 && parseFloat(formData.costPerPerson) > 0) && (
+                <span className="px-2.5 py-0.5 rounded-full bg-sky-600 text-white font-bold text-xs">
+                  Labor Total: ₹{(parseFloat(formData.personCount) * parseFloat(formData.costPerPerson)).toLocaleString()}
+                </span>
+              )}
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Harvest Sale / Income Gained (₹)"
+                label="Number of Persons / Laborers"
                 type="number"
-                value={formData.income}
-                onChange={(e) => setFormData({ ...formData, income: e.target.value })}
-                placeholder="e.g. 48000"
+                min="0"
+                value={formData.personCount}
+                onChange={(e) => setFormData({ ...formData, personCount: e.target.value })}
+                placeholder="e.g. 5"
               />
-            )}
+
+              <Input
+                label="Cost per Person (₹)"
+                type="number"
+                min="0"
+                value={formData.costPerPerson}
+                onChange={(e) => setFormData({ ...formData, costPerPerson: e.target.value })}
+                placeholder="e.g. 350"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl space-y-3">
+            <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wide flex items-center justify-between">
+              <span>💰 Financials</span>
+              {((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0)) > 0) && (
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-700 text-white font-bold text-xs">
+                  Total Expense: ₹{((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0))).toLocaleString()}
+                </span>
+              )}
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Material / Input Cost (₹)"
+                type="number"
+                min="0"
+                value={formData.materialCost}
+                onChange={(e) => setFormData({ ...formData, materialCost: e.target.value })}
+                placeholder="e.g. 1800"
+              />
+              {formData.type === 'Harvest' ? (
+                <Input
+                  label="Harvest Sale / Income Gained (₹)"
+                  type="number"
+                  min="0"
+                  value={formData.income}
+                  onChange={(e) => setFormData({ ...formData, income: e.target.value })}
+                  placeholder="e.g. 48000"
+                />
+              ) : (
+                <Input
+                  label="Direct Total Cost (₹)"
+                  type="number"
+                  min="0"
+                  value={formData.cost || ((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0)) || '')}
+                  onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                  placeholder="Auto calculated"
+                />
+              )}
+            </div>
           </div>
 
           <TextArea

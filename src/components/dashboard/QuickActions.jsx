@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PlusCircle, Receipt, Bell, Bot } from 'lucide-react';
+import { PlusCircle, Receipt, Bell, Bot, BarChart3 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const QuickActions = () => {
@@ -10,7 +10,7 @@ export const QuickActions = () => {
   const actions = [
     { label: t('addActivity'), path: '/add-activity', icon: PlusCircle, bg: 'bg-khet-600 text-white hover:bg-khet-700' },
     { label: t('addExpense'), path: '/add-expense', icon: Receipt, bg: 'bg-purple-600 text-white hover:bg-purple-700' },
-    { label: t('addReminder'), path: '/add-reminder', icon: Bell, bg: 'bg-amber-600 text-white hover:bg-amber-700' },
+    { label: 'Farm Reports', path: '/reports', icon: BarChart3, bg: 'bg-sky-600 text-white hover:bg-sky-700' },
     { label: t('askKhetSaathi'), path: '/ai-assistant', icon: Bot, bg: 'bg-gradient-to-r from-earth-600 to-earth-500 text-white hover:opacity-95' }
   ];
 

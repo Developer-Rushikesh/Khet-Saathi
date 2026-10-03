@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Sprout, Tractor, Clock, Calendar, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Tractor, Clock, Calendar, ArrowRight, CheckCircle2 } from 'lucide-react';
+import logo1 from '../../images/logo1.png';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -65,10 +66,12 @@ export const Dashboard = () => {
   return (
     <div className="space-y-6 animate-fade-in pb-8">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-khet-700 via-khet-600 to-khet-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-khet-600/15 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-khet-700 via-khet-600 to-khet-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-khet-600/15 relative overflow-hidden flex items-center justify-between">
         <div className="relative z-10">
           <div className="flex items-center gap-2 text-khet-200 text-xs font-bold uppercase tracking-wider mb-2">
-            <Sprout className="w-4 h-4" />
+            <div className="w-6 h-6 rounded-md bg-white p-0.5 inline-flex items-center justify-center">
+              <img src={logo1} alt="Logo" className="w-full h-full object-contain" />
+            </div>
             <span>Digital Farming Record Book</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -78,8 +81,8 @@ export const Dashboard = () => {
             {farms.length} Farms registered • {crops.length} Active Crops in season
           </p>
         </div>
-        <div className="absolute right-4 -bottom-6 opacity-10 pointer-events-none">
-          <Tractor className="w-48 h-48 text-white" />
+        <div className="hidden sm:block w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md p-3 border border-white/20 z-10">
+          <img src={logo1} alt="AI Khet Saathi" className="w-full h-full object-contain filter drop-shadow-md" />
         </div>
       </div>
 

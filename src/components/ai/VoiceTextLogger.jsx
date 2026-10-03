@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mic, Send, Sparkles, Check, Edit2, X, Loader2 } from 'lucide-react';
+import logo2 from '../../images/logo2.png';
 import { Button } from '../common/Button';
 import { mockApi } from '../../api/mockApi';
 import { useNotifications } from '../../context/NotificationContext';
@@ -54,9 +55,9 @@ export const VoiceTextLogger = () => {
 
   return (
     <div className="bg-gradient-to-br from-earth-50 to-white border border-earth-200 rounded-2xl p-4 sm:p-5 shadow-sm">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-earth-500 text-white flex items-center justify-center shadow-xs">
-          <Sparkles className="w-5 h-5" />
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-9 h-9 rounded-xl bg-white border border-earth-200 p-0.5 flex items-center justify-center overflow-hidden shadow-xs">
+          <img src={logo2} alt="AI Khet Saathi" className="w-full h-full object-contain" />
         </div>
         <div>
           <h3 className="text-base font-bold text-slate-800">Tell Khet Saathi</h3>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sprout, Phone, Lock, ArrowRight } from 'lucide-react';
+import { Phone, Lock, ArrowRight } from 'lucide-react';
+import logo1 from '../../images/logo1.png';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { useAuth } from '../../context/AuthContext';
@@ -34,8 +35,8 @@ export const Login = () => {
         
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-khet-600 to-khet-500 text-white flex items-center justify-center shadow-lg shadow-khet-600/30 mb-3">
-            <Sprout className="w-10 h-10" />
+          <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 p-2 flex items-center justify-center shadow-lg shadow-khet-600/10 mb-3 overflow-hidden">
+            <img src={logo1} alt="AI Khet Saathi" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">AI Khet Saathi</h1>
           <p className="text-sm text-slate-500 font-medium mt-1">{t('subtitle')}</p>

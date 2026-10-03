@@ -105,8 +105,49 @@ export const ActivityDetails = () => {
 
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
             <span className="text-slate-400 block font-medium">Quantity / Dose</span>
-            <span className="text-sm font-bold text-slate-800 mt-0.5 block">{activity.quantity} {activity.unit}</span>
+            <span className="text-sm font-bold text-slate-800 mt-0.5 block">{activity.quantity ? `${activity.quantity} ${activity.unit}` : 'N/A'}</span>
           </div>
+        </div>
+
+        {/* Labor / Worker & Financial Breakdown Card */}
+        <div className="p-4 bg-sky-50/60 border border-sky-200 rounded-2xl space-y-3 text-xs">
+          <h4 className="font-extrabold text-sky-900 uppercase tracking-wider flex items-center justify-between">
+            <span>👥 Labor & Expense Breakdown</span>
+            <span className="text-sm font-black text-sky-950">Total: ₹{parseFloat(activity.cost || 0).toLocaleString()}</span>
+          </h4>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+            <div className="bg-white p-2.5 rounded-xl border border-sky-100">
+              <span className="text-slate-400 font-semibold block">Workers Used</span>
+              <span className="text-sm font-bold text-slate-900">{activity.personCount || 0} Persons</span>
+            </div>
+
+            <div className="bg-white p-2.5 rounded-xl border border-sky-100">
+              <span className="text-slate-400 font-semibold block">Cost per Person</span>
+              <span className="text-sm font-bold text-slate-900">₹{activity.costPerPerson || 0} / day</span>
+            </div>
+
+            <div className="bg-white p-2.5 rounded-xl border border-sky-100">
+              <span className="text-slate-400 font-semibold block">Total Labor Cost</span>
+              <span className="text-sm font-bold text-sky-700">
+                ₹{((parseFloat(activity.personCount) || 0) * (parseFloat(activity.costPerPerson) || 0)).toLocaleString()}
+              </span>
+            </div>
+
+            <div className="bg-white p-2.5 rounded-xl border border-sky-100">
+              <span className="text-slate-400 font-semibold block">Material / Product Cost</span>
+              <span className="text-sm font-bold text-emerald-700">
+                ₹{(parseFloat(activity.materialCost) || (parseFloat(activity.cost || 0) - ((parseFloat(activity.personCount) || 0) * (parseFloat(activity.costPerPerson) || 0))) || 0).toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {activity.income > 0 && (
+            <div className="bg-emerald-100/80 p-3 rounded-xl border border-emerald-300 flex items-center justify-between font-bold text-emerald-900">
+              <span>🌾 Harvest Sale Revenue Gained:</span>
+              <span className="text-base font-black text-emerald-950">₹{parseFloat(activity.income).toLocaleString()}</span>
+            </div>
+          )}
         </div>
 
         {activity.notes && (

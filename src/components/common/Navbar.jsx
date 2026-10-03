@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sprout, Bell, Globe, User, Shield, Menu, X, Bot } from 'lucide-react';
+import { Bell, Globe, User, Shield, Menu, X, Bot } from 'lucide-react';
+import logo1 from '../../images/logo1.png';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -27,8 +28,8 @@ export const Navbar = ({ onOpenMobileMenu }) => {
           </button>
 
           <Link to={role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-khet-600 to-khet-500 text-white flex items-center justify-center shadow-md shadow-khet-500/20 group-hover:scale-105 transition-transform">
-              <Sprout className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-md shadow-khet-500/10 group-hover:scale-105 transition-transform overflow-hidden">
+              <img src={logo1} alt="AI Khet Saathi Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <span className="text-lg font-extrabold text-slate-900 leading-tight block tracking-tight">

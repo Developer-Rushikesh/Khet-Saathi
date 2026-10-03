@@ -93,9 +93,13 @@ const initialActivities = [
     productName: 'JS 335 Certified Seed',
     quantity: '15',
     unit: 'kg',
+    personCount: 2,
+    costPerPerson: 350,
+    laborCost: 700,
+    materialCost: 1800,
     cost: 2500,
     income: 0,
-    notes: 'Sown with seed drill after first rainfall.',
+    notes: 'Sown with seed drill after first rainfall with 2 farm helpers.',
     image: null
   },
   {
@@ -109,6 +113,10 @@ const initialActivities = [
     productName: 'Well Pump Irrigation',
     quantity: '4',
     unit: 'hours',
+    personCount: 1,
+    costPerPerson: 400,
+    laborCost: 400,
+    materialCost: 600,
     cost: 1000,
     income: 0,
     notes: 'Light irrigation given post seed emergence.',
@@ -125,9 +133,13 @@ const initialActivities = [
     productName: 'Emamectin Benzoate 5% SG',
     quantity: '100',
     unit: 'gm',
+    personCount: 2,
+    costPerPerson: 400,
+    laborCost: 800,
+    materialCost: 1000,
     cost: 1800,
     income: 0,
-    notes: 'Preventive spray against early caterpillar infestation.',
+    notes: 'Preventive spray against early caterpillar infestation using knapsack sprayer.',
     image: null
   },
   {
@@ -141,6 +153,10 @@ const initialActivities = [
     productName: 'NPK 10:26:26',
     quantity: '50',
     unit: 'kg',
+    personCount: 2,
+    costPerPerson: 400,
+    laborCost: 800,
+    materialCost: 2400,
     cost: 3200,
     income: 0,
     notes: 'Applied during first hoeing.',
@@ -155,11 +171,15 @@ const initialActivities = [
     type: 'Weeding',
     date: '2026-07-05',
     productName: 'Manual Labour Weeding',
-    quantity: '3',
+    quantity: '10',
     unit: 'workers',
+    personCount: 10,
+    costPerPerson: 400,
+    laborCost: 4000,
+    materialCost: 0,
     cost: 4000,
     income: 0,
-    notes: 'Cleared weeds between cotton rows.',
+    notes: 'Cleared weeds between cotton rows with 10 farm laborers.',
     image: null
   },
   {
@@ -173,6 +193,10 @@ const initialActivities = [
     productName: 'Combine Harvester Yield (18 Quintal)',
     quantity: '18',
     unit: 'quintal',
+    personCount: 4,
+    costPerPerson: 500,
+    laborCost: 2000,
+    materialCost: 2000,
     cost: 4000,
     income: 48000, // Harvest gained revenue ₹48,000
     notes: 'Harvested early crop yield sold at Satara APMC Mandi.',
@@ -189,6 +213,10 @@ const initialActivities = [
     productName: 'First Cotton Pick (8 Quintal)',
     quantity: '8',
     unit: 'quintal',
+    personCount: 5,
+    costPerPerson: 300,
+    laborCost: 1500,
+    materialCost: 500,
     cost: 2000,
     income: 32000, // Harvest gained revenue ₹32,000
     notes: 'First picking cotton sold to local trader.',
@@ -505,29 +533,38 @@ export const mockApi = {
   async createActivity(activityData) {
     await new Promise(r => setTimeout(r, DELAY_MS));
     const activities = loadOrInit('activities', initialActivities);
-    const cost = parseFloat(activityData.cost) || 0;
+    const personCount = parseFloat(activityData.personCount) || 0;
+    const costPerPerson = parseFloat(activityData.costPerPerson) || 0;
+    const laborCost = personCount * costPerPerson;
+    const materialCost = parseFloat(activityData.materialCost) || (personCount > 0 ? (parseFloat(activityData.cost) || 0) - laborCost : (parseFloat(activityData.cost) || 0));
+    const totalCost = (materialCost > 0 ? materialCost : 0) + laborCost;
     const income = parseFloat(activityData.income) || 0;
 
     const newActivity = {
       id: `act-${Date.now()}`,
-      cost,
-      income,
-      ...activityData
+      ...activityData,
+      personCount,
+      costPerPerson,
+      laborCost,
+      materialCost: materialCost > 0 ? materialCost : 0,
+      cost: totalCost,
+      income
     };
     activities.unshift(newActivity);
     saveStorage('activities', activities);
 
     // Automatically create corresponding Crop Expense entry if activity has a cost > 0
-    if (cost > 0) {
+    if (totalCost > 0) {
       const expenses = loadOrInit('expenses', initialExpenses);
+      const laborDesc = personCount > 0 ? ` (Labor: ${personCount} persons @ ₹${costPerPerson})` : '';
       expenses.unshift({
         id: `exp-${Date.now()}`,
         cropId: activityData.cropId,
         cropName: activityData.cropName,
         category: activityData.type || 'Other',
-        amount: cost,
+        amount: totalCost,
         date: activityData.date,
-        description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}`,
+        description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`,
         activityId: newActivity.id,
         receiptImage: activityData.image || null
       });
@@ -560,34 +597,48 @@ export const mockApi = {
     const activities = loadOrInit('activities', initialActivities);
     const index = activities.findIndex(a => a.id === id);
     if (index !== -1) {
-      const cost = parseFloat(activityData.cost) || 0;
+      const personCount = parseFloat(activityData.personCount) || 0;
+      const costPerPerson = parseFloat(activityData.costPerPerson) || 0;
+      const laborCost = personCount * costPerPerson;
+      const materialCost = parseFloat(activityData.materialCost) || (personCount > 0 ? (parseFloat(activityData.cost) || 0) - laborCost : (parseFloat(activityData.cost) || 0));
+      const totalCost = (materialCost > 0 ? materialCost : 0) + laborCost;
       const income = parseFloat(activityData.income) || 0;
 
-      activities[index] = { ...activities[index], ...activityData, cost, income };
+      activities[index] = {
+        ...activities[index],
+        ...activityData,
+        personCount,
+        costPerPerson,
+        laborCost,
+        materialCost: materialCost > 0 ? materialCost : 0,
+        cost: totalCost,
+        income
+      };
       saveStorage('activities', activities);
 
       // Update linked expense entry if cost exists
       const expenses = loadOrInit('expenses', initialExpenses);
       const expIdx = expenses.findIndex(e => e.activityId === id);
+      const laborDesc = personCount > 0 ? ` (Labor: ${personCount} persons @ ₹${costPerPerson})` : '';
       if (expIdx !== -1) {
-        if (cost > 0) {
-          expenses[expIdx].amount = cost;
+        if (totalCost > 0) {
+          expenses[expIdx].amount = totalCost;
           expenses[expIdx].date = activityData.date;
           expenses[expIdx].category = activityData.type;
-          expenses[expIdx].description = `${activityData.type} cost: ${activityData.productName || 'Activity expense'}`;
+          expenses[expIdx].description = `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`;
         } else {
           expenses.splice(expIdx, 1);
         }
         saveStorage('expenses', expenses);
-      } else if (cost > 0) {
+      } else if (totalCost > 0) {
         expenses.unshift({
           id: `exp-${Date.now()}`,
           cropId: activityData.cropId,
           cropName: activityData.cropName,
           category: activityData.type || 'Other',
-          amount: cost,
+          amount: totalCost,
           date: activityData.date,
-          description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}`,
+          description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`,
           activityId: id,
           receiptImage: activityData.image || null
         });

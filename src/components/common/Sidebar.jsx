@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import logo1 from '../../images/logo1.png';
 import {
   LayoutDashboard,
   Tractor,
@@ -36,6 +37,7 @@ export const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
     { label: t('reminders'), path: '/reminders', icon: CalendarCheck },
     { label: t('expenses'), path: '/expenses', icon: Receipt },
     { label: t('expenseReports'), path: '/expense-reports', icon: PieChart },
+    { label: t('comprehensiveReports'), path: '/reports', icon: BarChart3 },
     { label: 'AI Khet Saathi', path: '/ai-assistant', icon: Bot, highlight: true },
     { label: t('aiHistory'), path: '/ai-history', icon: MessageSquare },
     { label: t('notifications'), path: '/notifications', icon: Bell },
@@ -75,8 +77,8 @@ export const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
       >
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-khet-600 text-white flex items-center justify-center font-bold">
-              <Sprout className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 p-0.5 flex items-center justify-center overflow-hidden shadow-xs">
+              <img src={logo1} alt="Logo" className="w-full h-full object-contain" />
             </div>
             <span className="font-extrabold text-slate-800 text-base">Navigation</span>
           </div>

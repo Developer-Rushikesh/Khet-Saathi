@@ -30,6 +30,9 @@ export const AddActivity = () => {
     productName: prefilled.productName || '',
     quantity: prefilled.quantity || '',
     unit: prefilled.unit || 'liter',
+    personCount: prefilled.personCount || '',
+    costPerPerson: prefilled.costPerPerson || '',
+    materialCost: prefilled.materialCost || '',
     cost: prefilled.cost || '',
     income: prefilled.income || '',
     sprayReason: prefilled.sprayReason || '',
@@ -240,34 +243,82 @@ export const AddActivity = () => {
             </div>
           )}
 
-          {/* Activity Cost & Harvest Gain Section */}
-          <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl space-y-3">
-            <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wide block flex items-center gap-1.5">
-              💰 Financials (Expenses & Harvest Income)
+          {/* Worker / Person Cost Tracking Section */}
+          <div className="p-4 bg-sky-50/70 border border-sky-200 rounded-2xl space-y-3">
+            <span className="text-xs font-extrabold text-sky-900 uppercase tracking-wide flex items-center justify-between">
+              <span>👥 Workers / Laborers (व्यक्ती संख्या व दर)</span>
+              {(parseFloat(formData.personCount) > 0 && parseFloat(formData.costPerPerson) > 0) && (
+                <span className="px-2.5 py-0.5 rounded-full bg-sky-600 text-white font-bold text-xs">
+                  Labor Total: ₹{(parseFloat(formData.personCount) * parseFloat(formData.costPerPerson)).toLocaleString()}
+                </span>
+              )}
             </span>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Activity Cost / Expense (₹) (खर्च)"
+                label="Number of Persons / Laborers (व्यक्ती संख्या)"
                 type="number"
-                value={formData.cost}
-                onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
-                placeholder="e.g. 1800 (Auto adds to crop expenses)"
-                helperText="If specified, this amount will automatically add to Crop Expenses!"
+                min="0"
+                value={formData.personCount}
+                onChange={(e) => setFormData({ ...formData, personCount: e.target.value })}
+                placeholder="e.g. 5 workers"
+                helperText="How many persons worked on this activity?"
+              />
+
+              <Input
+                label="Cost per Person (₹) (दर व्यक्ती मजुरी/खर्च)"
+                type="number"
+                min="0"
+                value={formData.costPerPerson}
+                onChange={(e) => setFormData({ ...formData, costPerPerson: e.target.value })}
+                placeholder="e.g. 350 per day"
+                helperText="Daily wage or cost per person"
+              />
+            </div>
+          </div>
+
+          {/* Activity Cost & Harvest Gain Section */}
+          <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl space-y-3">
+            <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wide flex items-center justify-between">
+              <span>💰 Product & Total Financials</span>
+              {((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0)) > 0) && (
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-700 text-white font-bold text-xs">
+                  Total Expense: ₹{((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0))).toLocaleString()}
+                </span>
+              )}
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Product / Material Cost (₹) (सामग्री खर्च)"
+                type="number"
+                min="0"
+                value={formData.materialCost}
+                onChange={(e) => setFormData({ ...formData, materialCost: e.target.value })}
+                placeholder="e.g. 1800 (Seeds, pesticides, diesel)"
+                helperText="Direct material or machinery cost (excluding labor)"
               />
 
               {formData.type === 'Harvest' ? (
                 <Input
-                  label="Harvest Sale / Income Gained (₹) (उत्पन्न)"
+                  label="Harvest Sale / Revenue Gained (₹) (उत्पन्न)"
                   type="number"
+                  min="0"
                   value={formData.income}
                   onChange={(e) => setFormData({ ...formData, income: e.target.value })}
                   placeholder="e.g. 48000"
-                  helperText="Amount gained from crop harvest sale for Profit calculation!"
+                  helperText="Amount gained from crop harvest sale"
                 />
               ) : (
-                <div className="flex items-center text-xs text-slate-500 pt-7 font-medium">
-                  Select 'Harvest' type to enter Harvest Revenue & Gain.
-                </div>
+                <Input
+                  label="Direct Total Cost (₹) (or Auto Calculated)"
+                  type="number"
+                  min="0"
+                  value={formData.cost || ((parseFloat(formData.materialCost) || 0) + (parseFloat(formData.personCount || 0) * parseFloat(formData.costPerPerson || 0)) || '')}
+                  onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                  placeholder="Auto calculated from Labor + Material"
+                  helperText="Total activity expense auto-added to Crop Expenses"
+                />
               )}
             </div>
           </div>

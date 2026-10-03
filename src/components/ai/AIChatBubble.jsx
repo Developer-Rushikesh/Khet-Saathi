@@ -1,5 +1,6 @@
 import React from 'react';
-import { Bot, User } from 'lucide-react';
+import { User } from 'lucide-react';
+import logo2 from '../../images/logo2.png';
 
 export const AIChatBubble = ({ message }) => {
   const isUser = message.sender === 'user';
@@ -8,13 +9,13 @@ export const AIChatBubble = ({ message }) => {
     <div className={`flex items-start gap-3 my-3 ${isUser ? 'flex-row-reverse' : ''}`}>
       {/* Avatar */}
       <div
-        className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold shadow-xs ${
+        className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold shadow-xs overflow-hidden ${
           isUser
             ? 'bg-khet-600'
-            : 'bg-gradient-to-tr from-earth-600 to-earth-500 shadow-earth-500/20'
+            : 'bg-white border border-earth-300 p-0.5'
         }`}
       >
-        {isUser ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
+        {isUser ? <User className="w-5 h-5" /> : <img src={logo2} alt="Bot" className="w-full h-full object-contain" />}
       </div>
 
       {/* Bubble */}

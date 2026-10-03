@@ -664,6 +664,9 @@ Only complete and test the React frontend in this phase.
 
 
 
+crop activity me - us activity me kitne person lage 
+unke name and unke amount bhi unk sabka total amount us activity me add ho sake
 
-[AI Khet Saathi - Smart Digital Farming Record & AI Assistant](http://localhost:3000/crops/crop-1) == Total Crop Expenses
-₹12,500 is how to increase edit funtionality . first activites create time give per activity expence/cost this cost ad the crop expense and activity add one more feature harvest how menay ammout gain tthis amount show crop profit and also farm inside show profit amount and expnese amount 
+
+reposrt section hoga usme sara data hoga kitne farm kitne crop 
+hai kitna kharch hua kitna profit hua with filter option

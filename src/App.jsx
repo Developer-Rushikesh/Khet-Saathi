@@ -28,6 +28,7 @@ import { AddReminder } from './pages/farmer/AddReminder';
 import { Expenses } from './pages/farmer/Expenses';
 import { AddExpense } from './pages/farmer/AddExpense';
 import { ExpenseReports } from './pages/farmer/ExpenseReports';
+import { ComprehensiveReports } from './pages/farmer/ComprehensiveReports';
 import { AIKhetSaathi } from './pages/farmer/AIKhetSaathi';
 import { AIChatHistory } from './pages/farmer/AIChatHistory';
 import { Notifications } from './pages/farmer/Notifications';
@@ -98,6 +99,7 @@ export default function App() {
                 <Route path="/expenses" element={<Expenses />} />
                 <Route path="/add-expense" element={<AddExpense />} />
                 <Route path="/expense-reports" element={<ExpenseReports />} />
+                <Route path="/reports" element={<ComprehensiveReports />} />
                 <Route path="/ai-assistant" element={<AIKhetSaathi />} />
                 <Route path="/ai-history" element={<AIChatHistory />} />
                 <Route path="/notifications" element={<Notifications />} />
