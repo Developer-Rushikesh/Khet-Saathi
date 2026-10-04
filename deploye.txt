@@ -1,0 +1,137 @@
+================================================================================
+🌾 KHET SATHI — PRODUCTION DEPLOYMENT & SECURITY GUIDE (SQLITE3 & POSTGRESQL)
+================================================================================
+Frontend: Vercel (React 18 + Vite)
+Backend:  Render (Django REST Framework + Gunicorn + SQLite3)
+Security: Strict Role Isolation (Admin vs Farmer) + User Data Isolation
+================================================================================
+
+--------------------------------------------------------------------------------
+🔒 SECTION 1: SECURITY & USER DATA ISOLATION ARCHITECTURE
+--------------------------------------------------------------------------------
+
+1. NO ADMIN BUTTON ON FARMER DASHBOARD / NAVBAR
+   - The Admin Mode toggle has been completely REMOVED from the user dashboard and navbar.
+   - Farmers logged in as 'farmer' see ZERO options, links, or buttons to access admin features.
+   - Admin access is strictly available ONLY by authenticating with an Admin account on the /login page.
+
+2. ROLE-BASED ROUTE GUARD (FRONTEND)
+   - Admin Portal (/admin/*) is accessible ONLY to users with role === 'admin'.
+     If a normal farmer attempts to navigate directly to /admin, they are automatically blocked and redirected to /dashboard.
+   - Unauthenticated visitors attempting to open protected pages are redirected to /login.
+
+3. DATABASE QUERY DATA ISOLATION (BACKEND)
+   - Every Django REST ViewSet enforces IsAuthenticated permissions and user-filtered querysets:
+     • FarmViewSet     -> Farm.objects.filter(owner=request.user)
+     • CropViewSet     -> Crop.objects.filter(farm__owner=request.user)
+     • ActivityViewSet -> Activity.objects.filter(crop__farm__owner=request.user)
+     • ExpenseViewSet  -> Expense.objects.filter(crop__farm__owner=request.user)
+     • ReminderViewSet -> Reminder.objects.filter(farmer=request.user)
+   - User Profile (/api/auth/profile/) returns exclusively the authenticated user's own profile data.
+   - Farmers CANNOT view, modify, or delete another farmer's data under any circumstance.
+
+
+--------------------------------------------------------------------------------
+🚀 SECTION 2: DEPLOYING BACKEND ON RENDER WITH SQLITE3 (SIMPLEST WAY)
+--------------------------------------------------------------------------------
+
+If you want to use SQLite3 (no PostgreSQL database setup required):
+
+STEP 1: CREATE WEB SERVICE ON RENDER
+1. Log in to https://dashboard.render.com/
+2. Click 'New +' -> 'Web Service'.
+3. Connect your GitHub repository: `Developer-Rushikesh/Khet-Saathi`
+4. Root Directory: `backend`
+5. Environment: `Python 3`
+6. Region: Singapore / Frankfurt (or nearest region)
+7. Branch: `main` (or `master`)
+8. Build Command:
+   chmod +x build.sh && ./build.sh
+9. Start Command:
+   gunicorn config.wsgi:application
+
+STEP 2: CONFIGURE SQLITE3 ENVIRONMENT VARIABLES ON RENDER
+In Render Web Service -> 'Environment' tab, add these exact variables:
+
+Key                      Value
+--------------------------------------------------------------------------------
+USE_SQLITE_FALLBACK      True
+SECRET_KEY               khet-sathi-production-secret-key-2026-secure
+DEBUG                    False
+ALLOWED_HOSTS            khet-sathi-api.onrender.com,localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS     https://khet-sathi.vercel.app,http://localhost:5173
+--------------------------------------------------------------------------------
+
+*(Note: You DO NOT need DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, or DB_HOST when using SQLite3!)*
+
+STEP 3: BACKEND BUILD SCRIPT (backend/build.sh)
+The build script automatically runs on Render to set up database migrations and seed demo data:
+```bash
+#!/usr/bin/env bash
+set -o errexit
+
+pip install -r requirements.txt
+python manage.py collectstatic --no-input
+python manage.py migrate
+python manage.py seed_demo_data
+```
+
+
+--------------------------------------------------------------------------------
+⚡ SECTION 3: DEPLOYING FRONTEND (REACT + VITE) ON VERCEL
+--------------------------------------------------------------------------------
+
+STEP 1: REWRITE ROUTING CONFIG (vercel.json)
+Ensure `vercel.json` exists in project root for SPA client-side routing rewrites:
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+STEP 2: IMPORT PROJECT ON VERCEL
+1. Log in to https://vercel.com/
+2. Click 'Add New...' -> 'Project'.
+3. Import your GitHub repository: `Developer-Rushikesh/Khet-Saathi`
+4. Framework Preset: `Vite`
+5. Root Directory: `./` (project root)
+6. Build Command: `npm run build`
+7. Output Directory: `dist`
+
+STEP 3: CONFIGURE FRONTEND ENVIRONMENT VARIABLES ON VERCEL
+In Vercel Project Settings -> 'Environment Variables':
+
+Key                      Value
+--------------------------------------------------------------------------------
+VITE_API_BASE_URL        https://khet-sathi-api.onrender.com/api
+--------------------------------------------------------------------------------
+
+STEP 4: DEPLOY
+Click 'Deploy'. Vercel will build Vite and assign your live domain:
+e.g. https://khet-sathi.vercel.app
+
+
+--------------------------------------------------------------------------------
+🧪 SECTION 4: PRODUCTION VERIFICATION & DEMO CREDENTIALS
+--------------------------------------------------------------------------------
+
+1. ADMIN PORTAL ACCESS VERIFICATION:
+   - Login Email:    admin@example.com
+   - Password:       adminpassword123
+   - Direct Login:   Sign in with admin credentials at /login (Redirects to /admin)
+
+2. FARMER PORTAL ACCESS VERIFICATION:
+   - Login Email:    ramesh@example.com
+   - Password:       password123
+   - Direct Login:   Sign in with farmer credentials at /login (Redirects to /dashboard)
+   - Verify:         NO Admin switcher or admin options exist on Farmer Navbar/Dashboard!
+
+3. TEST DATA ISOLATION:
+   - Register a new farmer account -> Verify you see empty/new farm records.
+   - Log out -> Log in as Ramesh Patil -> Verify only Ramesh's farms are visible.
+
+================================================================================
+✅ KHET SATHI WITH SECURE ISOLATION IS READY FOR VERCEL + RENDER DEPLOYMENT!
+================================================================================

@@ -1,5 +1,5 @@
-// Central Mock API Service for AI Khet Saathi
-// Simulated asynchronous delay to test React loading & error handling states
+// Central API Service for AI Khet Saathi (Connecting Live Django Backend & Fallback Mock)
+import { realApi } from './realApi';
 
 const DELAY_MS = 250;
 
@@ -416,187 +416,182 @@ const saveStorage = (key, data) => {
 export const mockApi = {
   // Profiles
   async getProfile() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('profile', initialFarmerProfile);
+    try {
+      return await realApi.getProfile();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('profile', initialFarmerProfile);
+    }
   },
 
   async updateProfile(profileData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const current = loadOrInit('profile', initialFarmerProfile);
-    const updated = { ...current, ...profileData };
-    saveStorage('profile', updated);
-    return updated;
+    try {
+      return await realApi.register(profileData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const current = loadOrInit('profile', initialFarmerProfile);
+      const updated = { ...current, ...profileData };
+      saveStorage('profile', updated);
+      return updated;
+    }
   },
 
   // Farms
   async getFarms() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('farms', initialFarms);
+    try {
+      return await realApi.getFarms();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('farms', initialFarms);
+    }
   },
 
   async getFarmById(id) {
+    try {
+      const item = await realApi.getFarmById(id);
+      if (item) return item;
+    } catch (e) {}
     await new Promise(r => setTimeout(r, DELAY_MS));
     const farms = loadOrInit('farms', initialFarms);
     return farms.find(f => f.id === id) || null;
   },
 
   async createFarm(farmData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const farms = loadOrInit('farms', initialFarms);
-    const newFarm = {
-      id: `farm-${Date.now()}`,
-      createdAt: new Date().toISOString().split('T')[0],
-      ...farmData
-    };
-    farms.unshift(newFarm);
-    saveStorage('farms', farms);
-    return newFarm;
+    try {
+      return await realApi.createFarm(farmData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const farms = loadOrInit('farms', initialFarms);
+      const newFarm = {
+        id: `farm-${Date.now()}`,
+        createdAt: new Date().toISOString().split('T')[0],
+        ...farmData
+      };
+      farms.unshift(newFarm);
+      saveStorage('farms', farms);
+      return newFarm;
+    }
   },
 
   async updateFarm(id, farmData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const farms = loadOrInit('farms', initialFarms);
-    const index = farms.findIndex(f => f.id === id);
-    if (index !== -1) {
-      farms[index] = { ...farms[index], ...farmData };
-      saveStorage('farms', farms);
-      return farms[index];
+    try {
+      return await realApi.updateFarm(id, farmData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const farms = loadOrInit('farms', initialFarms);
+      const index = farms.findIndex(f => f.id === id);
+      if (index !== -1) {
+        farms[index] = { ...farms[index], ...farmData };
+        saveStorage('farms', farms);
+        return farms[index];
+      }
+      throw new Error('Farm not found');
     }
-    throw new Error('Farm not found');
   },
 
   async deleteFarm(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    let farms = loadOrInit('farms', initialFarms);
-    farms = farms.filter(f => f.id !== id);
-    saveStorage('farms', farms);
-    return true;
+    try {
+      return await realApi.deleteFarm(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      let farms = loadOrInit('farms', initialFarms);
+      farms = farms.filter(f => f.id !== id);
+      saveStorage('farms', farms);
+      return true;
+    }
   },
 
   // Crops
   async getCrops() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('crops', initialCrops);
+    try {
+      return await realApi.getCrops();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('crops', initialCrops);
+    }
   },
 
   async getCropById(id) {
+    try {
+      const item = await realApi.getCropById(id);
+      if (item) return item;
+    } catch (e) {}
     await new Promise(r => setTimeout(r, DELAY_MS));
     const crops = loadOrInit('crops', initialCrops);
     return crops.find(c => c.id === id) || null;
   },
 
   async createCrop(cropData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const crops = loadOrInit('crops', initialCrops);
-    const newCrop = {
-      id: `crop-${Date.now()}`,
-      status: 'active',
-      ...cropData
-    };
-    crops.unshift(newCrop);
-    saveStorage('crops', crops);
-    return newCrop;
+    try {
+      return await realApi.createCrop(cropData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const crops = loadOrInit('crops', initialCrops);
+      const newCrop = {
+        id: `crop-${Date.now()}`,
+        status: 'active',
+        ...cropData
+      };
+      crops.unshift(newCrop);
+      saveStorage('crops', crops);
+      return newCrop;
+    }
   },
 
   async updateCrop(id, cropData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const crops = loadOrInit('crops', initialCrops);
-    const index = crops.findIndex(c => c.id === id);
-    if (index !== -1) {
-      crops[index] = { ...crops[index], ...cropData };
-      saveStorage('crops', crops);
-      return crops[index];
+    try {
+      return await realApi.updateCrop(id, cropData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const crops = loadOrInit('crops', initialCrops);
+      const index = crops.findIndex(c => c.id === id);
+      if (index !== -1) {
+        crops[index] = { ...crops[index], ...cropData };
+        saveStorage('crops', crops);
+        return crops[index];
+      }
+      throw new Error('Crop not found');
     }
-    throw new Error('Crop not found');
   },
 
   async deleteCrop(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    let crops = loadOrInit('crops', initialCrops);
-    crops = crops.filter(c => c.id !== id);
-    saveStorage('crops', crops);
-    return true;
+    try {
+      return await realApi.deleteCrop(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      let crops = loadOrInit('crops', initialCrops);
+      crops = crops.filter(c => c.id !== id);
+      saveStorage('crops', crops);
+      return true;
+    }
   },
 
   // Activities & Expense / Income Integration
   async getActivities() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('activities', initialActivities);
+    try {
+      return await realApi.getActivities();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('activities', initialActivities);
+    }
   },
 
   async getActivityById(id) {
+    try {
+      const item = await realApi.getActivityById(id);
+      if (item) return item;
+    } catch (e) {}
     await new Promise(r => setTimeout(r, DELAY_MS));
     const activities = loadOrInit('activities', initialActivities);
     return activities.find(a => a.id === id) || null;
   },
 
   async createActivity(activityData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const activities = loadOrInit('activities', initialActivities);
-    const personCount = parseFloat(activityData.personCount) || 0;
-    const costPerPerson = parseFloat(activityData.costPerPerson) || 0;
-    const laborCost = personCount * costPerPerson;
-    const materialCost = parseFloat(activityData.materialCost) || (personCount > 0 ? (parseFloat(activityData.cost) || 0) - laborCost : (parseFloat(activityData.cost) || 0));
-    const totalCost = (materialCost > 0 ? materialCost : 0) + laborCost;
-    const income = parseFloat(activityData.income) || 0;
-
-    const newActivity = {
-      id: `act-${Date.now()}`,
-      ...activityData,
-      personCount,
-      costPerPerson,
-      laborCost,
-      materialCost: materialCost > 0 ? materialCost : 0,
-      cost: totalCost,
-      income
-    };
-    activities.unshift(newActivity);
-    saveStorage('activities', activities);
-
-    // Automatically create corresponding Crop Expense entry if activity has a cost > 0
-    if (totalCost > 0) {
-      const expenses = loadOrInit('expenses', initialExpenses);
-      const laborDesc = personCount > 0 ? ` (Labor: ${personCount} persons @ ₹${costPerPerson})` : '';
-      expenses.unshift({
-        id: `exp-${Date.now()}`,
-        cropId: activityData.cropId,
-        cropName: activityData.cropName,
-        category: activityData.type || 'Other',
-        amount: totalCost,
-        date: activityData.date,
-        description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`,
-        activityId: newActivity.id,
-        receiptImage: activityData.image || null
-      });
-      saveStorage('expenses', expenses);
-    }
-
-    // Auto create follow up reminder if requested
-    if (activityData.createReminder && activityData.reminderDate) {
-      const reminders = loadOrInit('reminders', initialReminders);
-      reminders.unshift({
-        id: `rem-${Date.now()}`,
-        title: `Follow up: ${activityData.type} - ${activityData.cropName || 'Crop'}`,
-        cropId: activityData.cropId,
-        cropName: activityData.cropName,
-        farmId: activityData.farmId,
-        farmName: activityData.farmName,
-        activityType: activityData.type,
-        reminderDate: activityData.reminderDate,
-        notes: `Follow up after ${activityData.type} on ${activityData.date}`,
-        status: 'upcoming'
-      });
-      saveStorage('reminders', reminders);
-    }
-
-    return newActivity;
-  },
-
-  async updateActivity(id, activityData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const activities = loadOrInit('activities', initialActivities);
-    const index = activities.findIndex(a => a.id === id);
-    if (index !== -1) {
+    try {
+      return await realApi.createActivity(activityData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const activities = loadOrInit('activities', initialActivities);
       const personCount = parseFloat(activityData.personCount) || 0;
       const costPerPerson = parseFloat(activityData.costPerPerson) || 0;
       const laborCost = personCount * costPerPerson;
@@ -604,8 +599,8 @@ export const mockApi = {
       const totalCost = (materialCost > 0 ? materialCost : 0) + laborCost;
       const income = parseFloat(activityData.income) || 0;
 
-      activities[index] = {
-        ...activities[index],
+      const newActivity = {
+        id: `act-${Date.now()}`,
         ...activityData,
         personCount,
         costPerPerson,
@@ -614,23 +609,12 @@ export const mockApi = {
         cost: totalCost,
         income
       };
+      activities.unshift(newActivity);
       saveStorage('activities', activities);
 
-      // Update linked expense entry if cost exists
-      const expenses = loadOrInit('expenses', initialExpenses);
-      const expIdx = expenses.findIndex(e => e.activityId === id);
-      const laborDesc = personCount > 0 ? ` (Labor: ${personCount} persons @ ₹${costPerPerson})` : '';
-      if (expIdx !== -1) {
-        if (totalCost > 0) {
-          expenses[expIdx].amount = totalCost;
-          expenses[expIdx].date = activityData.date;
-          expenses[expIdx].category = activityData.type;
-          expenses[expIdx].description = `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`;
-        } else {
-          expenses.splice(expIdx, 1);
-        }
-        saveStorage('expenses', expenses);
-      } else if (totalCost > 0) {
+      if (totalCost > 0) {
+        const expenses = loadOrInit('expenses', initialExpenses);
+        const laborDesc = personCount > 0 ? ` (Labor: ${personCount} persons @ ₹${costPerPerson})` : '';
         expenses.unshift({
           id: `exp-${Date.now()}`,
           cropId: activityData.cropId,
@@ -639,221 +623,340 @@ export const mockApi = {
           amount: totalCost,
           date: activityData.date,
           description: `${activityData.type} cost: ${activityData.productName || 'Activity expense'}${laborDesc}`,
-          activityId: id,
+          activityId: newActivity.id,
           receiptImage: activityData.image || null
         });
         saveStorage('expenses', expenses);
       }
-
-      return activities[index];
+      return newActivity;
     }
-    throw new Error('Activity not found');
+  },
+
+  async updateActivity(id, activityData) {
+    try {
+      return await realApi.updateActivity(id, activityData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const activities = loadOrInit('activities', initialActivities);
+      const index = activities.findIndex(a => a.id === id);
+      if (index !== -1) {
+        const personCount = parseFloat(activityData.personCount) || 0;
+        const costPerPerson = parseFloat(activityData.costPerPerson) || 0;
+        const laborCost = personCount * costPerPerson;
+        const materialCost = parseFloat(activityData.materialCost) || (personCount > 0 ? (parseFloat(activityData.cost) || 0) - laborCost : (parseFloat(activityData.cost) || 0));
+        const totalCost = (materialCost > 0 ? materialCost : 0) + laborCost;
+        const income = parseFloat(activityData.income) || 0;
+
+        activities[index] = {
+          ...activities[index],
+          ...activityData,
+          personCount,
+          costPerPerson,
+          laborCost,
+          materialCost: materialCost > 0 ? materialCost : 0,
+          cost: totalCost,
+          income
+        };
+        saveStorage('activities', activities);
+        return activities[index];
+      }
+      throw new Error('Activity not found');
+    }
   },
 
   async deleteActivity(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    let activities = loadOrInit('activities', initialActivities);
-    activities = activities.filter(a => a.id !== id);
-    saveStorage('activities', activities);
-
-    // Remove linked expense
-    let expenses = loadOrInit('expenses', initialExpenses);
-    expenses = expenses.filter(e => e.activityId !== id);
-    saveStorage('expenses', expenses);
-
-    return true;
+    try {
+      return await realApi.deleteActivity(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      let activities = loadOrInit('activities', initialActivities);
+      activities = activities.filter(a => a.id !== id);
+      saveStorage('activities', activities);
+      return true;
+    }
   },
 
   // Reminders
   async getReminders() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('reminders', initialReminders);
+    try {
+      return await realApi.getReminders();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('reminders', initialReminders);
+    }
   },
 
   async createReminder(reminderData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const reminders = loadOrInit('reminders', initialReminders);
-    const newReminder = {
-      id: `rem-${Date.now()}`,
-      status: 'upcoming',
-      ...reminderData
-    };
-    reminders.unshift(newReminder);
-    saveStorage('reminders', reminders);
-    return newReminder;
+    try {
+      return await realApi.createReminder(reminderData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const reminders = loadOrInit('reminders', initialReminders);
+      const newReminder = {
+        id: `rem-${Date.now()}`,
+        status: 'upcoming',
+        ...reminderData
+      };
+      reminders.unshift(newReminder);
+      saveStorage('reminders', reminders);
+      return newReminder;
+    }
   },
 
   async updateReminderStatus(id, newStatus) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const reminders = loadOrInit('reminders', initialReminders);
-    const index = reminders.findIndex(r => r.id === id);
-    if (index !== -1) {
-      reminders[index].status = newStatus;
-      saveStorage('reminders', reminders);
-      return reminders[index];
+    try {
+      return await realApi.updateReminderStatus(id, newStatus);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const reminders = loadOrInit('reminders', initialReminders);
+      const index = reminders.findIndex(r => r.id === id);
+      if (index !== -1) {
+        reminders[index].status = newStatus;
+        saveStorage('reminders', reminders);
+        return reminders[index];
+      }
+      throw new Error('Reminder not found');
     }
-    throw new Error('Reminder not found');
   },
 
   async deleteReminder(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    let reminders = loadOrInit('reminders', initialReminders);
-    reminders = reminders.filter(r => r.id !== id);
-    saveStorage('reminders', reminders);
-    return true;
+    try {
+      return await realApi.deleteReminder(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      let reminders = loadOrInit('reminders', initialReminders);
+      reminders = reminders.filter(r => r.id !== id);
+      saveStorage('reminders', reminders);
+      return true;
+    }
   },
 
   // Expenses
   async getExpenses() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('expenses', initialExpenses);
+    try {
+      return await realApi.getExpenses();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('expenses', initialExpenses);
+    }
   },
 
   async createExpense(expenseData) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const expenses = loadOrInit('expenses', initialExpenses);
-    const newExpense = {
-      id: `exp-${Date.now()}`,
-      amount: parseFloat(expenseData.amount) || 0,
-      ...expenseData
-    };
-    expenses.unshift(newExpense);
-    saveStorage('expenses', expenses);
-    return newExpense;
+    try {
+      return await realApi.createExpense(expenseData);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const expenses = loadOrInit('expenses', initialExpenses);
+      const newExpense = {
+        id: `exp-${Date.now()}`,
+        amount: parseFloat(expenseData.amount) || 0,
+        ...expenseData
+      };
+      expenses.unshift(newExpense);
+      saveStorage('expenses', expenses);
+      return newExpense;
+    }
   },
 
   async deleteExpense(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    let expenses = loadOrInit('expenses', initialExpenses);
-    expenses = expenses.filter(e => e.id !== id);
-    saveStorage('expenses', expenses);
-    return true;
+    try {
+      return await realApi.deleteExpense(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      let expenses = loadOrInit('expenses', initialExpenses);
+      expenses = expenses.filter(e => e.id !== id);
+      saveStorage('expenses', expenses);
+      return true;
+    }
   },
 
   // Financial Calculations for Crop & Farm Profitability
   async getFinancialSummary() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const expenses = loadOrInit('expenses', initialExpenses);
-    const activities = loadOrInit('activities', initialActivities);
+    try {
+      const expenses = await this.getExpenses();
+      const activities = await this.getActivities();
 
-    const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
-    const totalHarvestGain = activities.reduce((sum, a) => sum + (parseFloat(a.income) || 0), 0);
-    const netProfit = totalHarvestGain - totalExpense;
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const totalHarvestGain = activities.reduce((sum, a) => sum + (parseFloat(a.income) || 0), 0);
+      const netProfit = totalHarvestGain - totalExpense;
 
-    return { totalExpense, totalHarvestGain, netProfit };
+      return { totalExpense, totalHarvestGain, netProfit };
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const expenses = loadOrInit('expenses', initialExpenses);
+      const activities = loadOrInit('activities', initialActivities);
+
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const totalHarvestGain = activities.reduce((sum, a) => sum + (parseFloat(a.income) || 0), 0);
+      const netProfit = totalHarvestGain - totalExpense;
+
+      return { totalExpense, totalHarvestGain, netProfit };
+    }
   },
 
   // AI Assistant & Voice/Text Parser
   async getAIChatHistory() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('ai_history', initialAIChatHistory);
+    try {
+      return await realApi.getAIChatHistory();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('ai_history', initialAIChatHistory);
+    }
   },
 
   async askAI(userQuestion) {
-    await new Promise(r => setTimeout(r, DELAY_MS * 2));
-    const history = loadOrInit('ai_history', initialAIChatHistory);
-    
-    // Create User Message
-    const userMsg = {
-      id: `msg-${Date.now()}`,
-      sender: 'user',
-      text: userQuestion,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-    history.push(userMsg);
+    try {
+      return await realApi.askAI(userQuestion);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS * 2));
+      const history = loadOrInit('ai_history', initialAIChatHistory);
+      
+      const userMsg = {
+        id: `msg-${Date.now()}`,
+        sender: 'user',
+        text: userQuestion,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      history.push(userMsg);
 
-    let replyText = "I have checked your digital records for AI Khet Saathi.";
-    const qLower = userQuestion.toLowerCase();
+      let replyText = "I have checked your digital records for Khet Sathi.";
+      const qLower = userQuestion.toLowerCase();
 
-    if (qLower.includes('spray') || qLower.includes('फवारणी') || qLower.includes('स्प्रे')) {
-      replyText = "Your latest recorded soybean spray was on 25 June 2026 using Emamectin Benzoate 5% SG (100 gm) on Main Farm (Cost: ₹1,800).";
-    } else if (qLower.includes('profit') || qLower.includes('मुनाफा') || qLower.includes('नफा') || qLower.includes('gain') || qLower.includes('kamai')) {
-      replyText = "Your total recorded Soybean Harvest Gain is ₹48,000 against ₹12,500 total expenses. Your net Soybean crop profit is ₹35,500!";
-    } else if (qLower.includes('water') || qLower.includes('irrigation') || qLower.includes('पाणी') || qLower.includes('सिंचाई')) {
-      replyText = "Your last recorded irrigation was on 20 June 2026 for Soybean (Well Pump - 4 hours). Next sugarcane irrigation is due on 7 October.";
-    } else if (qLower.includes('expense') || qLower.includes('खर्च') || qLower.includes('total') || qLower.includes('पैसा')) {
-      replyText = "Your total recorded farming expenses for this season are ₹23,500. Soybean accounts for ₹12,500, Cotton accounts for ₹9,500, and Sugarcane for ₹1,200.";
-    } else {
-      replyText = `Based on your digital record, your farms (Main Farm & Riverbank Land) have recorded ₹80,000 total Harvest Gain and ₹23,500 expenses, giving you ₹56,500 overall net profit!`;
+      // Language detection or fallback to global lang
+      const currentLang = localStorage.getItem('khet_saathi_lang') || 'en';
+
+      if (qLower.includes('spray') || qLower.includes('फवारणी') || qLower.includes('स्प्रे')) {
+        if (currentLang === 'hi') {
+          replyText = "आपकी सोयाबीन की अंतिम फवारणी 25 जून 2026 को इमामेक्टिन बेंजोएट 5% SG (100 ग्राम) से मुख्य खेत पर दर्ज की गई थी (खर्च: ₹1,800)।";
+        } else if (currentLang === 'mr') {
+          replyText = "तुमची सोयाबीनची शेवटची फवारणी २५ जून २०२६ रोजी इमामेक्टिन बेन्झोएट ५% एसजी (१०० ग्रॅम) सह मुख्य शेतावर नोंदवली गेली होती (खर्च: ₹१,८००).";
+        } else {
+          replyText = "Your latest recorded soybean spray was on 25 June 2026 using Emamectin Benzoate 5% SG (100 gm) on Main Farm (Cost: ₹1,800).";
+        }
+      } else if (qLower.includes('profit') || qLower.includes('मुनाफा') || qLower.includes('नफा') || qLower.includes('gain') || qLower.includes('kamai')) {
+        if (currentLang === 'hi') {
+          replyText = "आपकी सोयाबीन की कुल दर्ज फसल कमाई ₹48,000 है, जबकि कुल खर्च ₹12,500 है। आपका शुद्ध सोयाबीन लाभ ₹35,500 है!";
+        } else if (currentLang === 'mr') {
+          replyText = "तुमचे एकूण नोंदवलेले सोयाबीन पीक उत्पन्न ₹४८,००० आहे आणि एकूण खर्च ₹१२,५०० आहे. तुमचा निव्वळ सोयाबीन नफा ₹३५,५०० आहे!";
+        } else {
+          replyText = "Your total recorded Soybean Harvest Gain is ₹48,000 against ₹12,500 total expenses. Your net Soybean crop profit is ₹35,500!";
+        }
+      } else if (qLower.includes('water') || qLower.includes('irrigation') || qLower.includes('पाणी') || qLower.includes('सिंचाई')) {
+        if (currentLang === 'hi') {
+          replyText = "आपकी अंतिम दर्ज सिंचाई 20 जून 2026 को सोयाबीन के लिए (कुआं पंप - 4 घंटे) की गई थी। अगली गन्ने की सिंचाई 7 अक्टूबर को प्रस्तावित है।";
+        } else if (currentLang === 'mr') {
+          replyText = "तुमचे शेवटचे नोंदवलेले पाणी २० जून २०२६ रोजी सोयाबीनसाठी (विहीर पंप - ४ तास) होते. पुढील ऊसाचे पाणी ७ ऑक्टोबरला नियोजित आहे.";
+        } else {
+          replyText = "Your last recorded irrigation was on 20 June 2026 for Soybean (Well Pump - 4 hours). Next sugarcane irrigation is due on 7 October.";
+        }
+      } else if (qLower.includes('expense') || qLower.includes('खर्च') || qLower.includes('total') || qLower.includes('पैसा')) {
+        if (currentLang === 'hi') {
+          replyText = "इस सीजन के लिए आपका कुल दर्ज खेती खर्च ₹23,500 है। सोयाबीन का ₹12,500, कपास का ₹9,500 और गन्ने का ₹1,200 है।";
+        } else if (currentLang === 'mr') {
+          replyText = "या हंगामासाठी तुमचा एकूण नोंदवलेला शेती खर्च ₹२३,५०० आहे. सोयाबीनचा ₹१२,५००, कापसाचा ₹९,५०० आणि ऊसाचा ₹१,२०० आहे.";
+        } else {
+          replyText = "Your total recorded farming expenses for this season are ₹23,500. Soybean accounts for ₹12,500, Cotton accounts for ₹9,500, and Sugarcane for ₹1,200.";
+        }
+      } else {
+        if (currentLang === 'hi') {
+          replyText = "आपके डिजिटल रिकॉर्ड के अनुसार, आपके खेतों में कुल ₹80,000 की फसल आय और ₹23,500 का खर्च दर्ज है, जिससे कुल शुद्ध लाभ ₹56,500 होता है!";
+        } else if (currentLang === 'mr') {
+          replyText = "तुमच्या डिजिटल नोंदींनुसार, तुमच्या शेतात एकूण ₹८०,००० चे पीक उत्पन्न आणि ₹२३,५०० खर्च नोंदवला गेला आहे, ज्यामुळे निव्वळ नफा ₹५६,५०० मिळतो!";
+        } else {
+          replyText = "Based on your digital record, your farms (Main Farm & Riverbank Land) have recorded ₹80,000 total Harvest Gain and ₹23,500 expenses, giving you ₹56,500 overall net profit!";
+        }
+      }
+
+      const aiMsg = {
+        id: `msg-${Date.now() + 1}`,
+        sender: 'ai',
+        text: replyText,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      history.push(aiMsg);
+      saveStorage('ai_history', history);
+
+      return { userMsg, aiMsg };
     }
-
-    const aiMsg = {
-      id: `msg-${Date.now() + 1}`,
-      sender: 'ai',
-      text: replyText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-    history.push(aiMsg);
-    saveStorage('ai_history', history);
-
-    return { userMsg, aiMsg };
   },
 
   async parseTellKhetSaathiInput(textInput) {
-    await new Promise(r => setTimeout(r, DELAY_MS * 1.5));
-    const lower = textInput.toLowerCase();
-    
-    let activityType = 'Other';
-    let cost = 0;
-    let income = 0;
+    try {
+      return await realApi.parseTellKhetSaathiInput(textInput);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS * 1.5));
+      const lower = textInput.toLowerCase();
+      
+      let activityType = 'Other';
+      let cost = 0;
+      let income = 0;
 
-    if (lower.includes('paani') || lower.includes('pani') || lower.includes('water') || lower.includes('irrigation') || lower.includes('सिंचाई')) {
-      activityType = 'Irrigation';
-      cost = 500;
-    } else if (lower.includes('spray') || lower.includes('fawarni') || lower.includes('दवा')) {
-      activityType = 'Spray';
-      cost = 1500;
-    } else if (lower.includes('khat') || lower.includes('fertilizer') || lower.includes('खाद')) {
-      activityType = 'Fertilizer';
-      cost = 3000;
-    } else if (lower.includes('harvest') || lower.includes('katayi') || lower.includes('काढणी') || lower.includes('sold')) {
-      activityType = 'Harvest';
-      cost = 2500;
-      income = 35000;
+      if (lower.includes('paani') || lower.includes('pani') || lower.includes('water') || lower.includes('irrigation') || lower.includes('सिंचाई')) {
+        activityType = 'Irrigation';
+        cost = 500;
+      } else if (lower.includes('spray') || lower.includes('fawarni') || lower.includes('दवा')) {
+        activityType = 'Spray';
+        cost = 1500;
+      } else if (lower.includes('khat') || lower.includes('fertilizer') || lower.includes('खाद')) {
+        activityType = 'Fertilizer';
+        cost = 3000;
+      } else if (lower.includes('harvest') || lower.includes('katayi') || lower.includes('काढणी') || lower.includes('sold')) {
+        activityType = 'Harvest';
+        cost = 2500;
+        income = 35000;
+      }
+
+      let cropName = 'Soybean';
+      let cropId = 'crop-1';
+      if (lower.includes('cotton') || lower.includes('kapus') || lower.includes('कापूस')) {
+        cropName = 'Cotton';
+        cropId = 'crop-2';
+      } else if (lower.includes('sugarcane') || lower.includes('us') || lower.includes('ऊस')) {
+        cropName = 'Sugarcane';
+        cropId = 'crop-3';
+      }
+
+      return {
+        cropId,
+        cropName,
+        farmId: 'farm-1',
+        farmName: 'Main Farm',
+        type: activityType,
+        date: new Date().toISOString().split('T')[0],
+        productName: activityType === 'Harvest' ? 'Harvest Yield Sale' : (activityType === 'Irrigation' ? 'Canal / Pump Water' : 'Standard Application'),
+        quantity: '1',
+        unit: activityType === 'Harvest' ? 'quintal' : (activityType === 'Irrigation' ? 'hours' : 'dose'),
+        cost,
+        income,
+        notes: `Captured via Khet Saathi voice/text logger: "${textInput}"`,
+        rawText: textInput
+      };
     }
-
-    let cropName = 'Soybean';
-    let cropId = 'crop-1';
-    if (lower.includes('cotton') || lower.includes('kapus') || lower.includes('कापूस')) {
-      cropName = 'Cotton';
-      cropId = 'crop-2';
-    } else if (lower.includes('sugarcane') || lower.includes('us') || lower.includes('ऊस')) {
-      cropName = 'Sugarcane';
-      cropId = 'crop-3';
-    }
-
-    return {
-      cropId,
-      cropName,
-      farmId: 'farm-1',
-      farmName: 'Main Farm',
-      type: activityType,
-      date: new Date().toISOString().split('T')[0],
-      productName: activityType === 'Harvest' ? 'Harvest Yield Sale' : (activityType === 'Irrigation' ? 'Canal / Pump Water' : 'Standard Application'),
-      quantity: '1',
-      unit: activityType === 'Harvest' ? 'quintal' : (activityType === 'Irrigation' ? 'hours' : 'dose'),
-      cost,
-      income,
-      notes: `Captured via Khet Saathi voice/text logger: "${textInput}"`,
-      rawText: textInput
-    };
   },
 
   // Notifications
   async getNotifications() {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    return loadOrInit('notifications', initialNotifications);
+    try {
+      return await realApi.getNotifications();
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      return loadOrInit('notifications', initialNotifications);
+    }
   },
 
   async markNotificationRead(id) {
-    await new Promise(r => setTimeout(r, DELAY_MS));
-    const notifs = loadOrInit('notifications', initialNotifications);
-    const index = notifs.findIndex(n => n.id === id);
-    if (index !== -1) {
-      notifs[index].read = true;
-      saveStorage('notifications', notifs);
+    try {
+      return await realApi.markNotificationRead(id);
+    } catch (e) {
+      await new Promise(r => setTimeout(r, DELAY_MS));
+      const notifs = loadOrInit('notifications', initialNotifications);
+      const index = notifs.findIndex(n => n.id === id);
+      if (index !== -1) {
+        notifs[index].read = true;
+        saveStorage('notifications', notifs);
+      }
+      return notifs;
     }
-    return notifs;
   },
 
   // Admin Mock Services

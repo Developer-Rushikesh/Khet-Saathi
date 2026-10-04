@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Tractor, Clock, Calendar, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Clock, Calendar, ArrowRight } from 'lucide-react';
 import logo1 from '../../images/logo1.png';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -64,25 +64,25 @@ export const Dashboard = () => {
   const totalExpensesSum = expenses.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
 
   return (
-    <div className="space-y-6 animate-fade-in pb-8">
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-khet-700 via-khet-600 to-khet-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-khet-600/15 relative overflow-hidden flex items-center justify-between">
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 text-khet-200 text-xs font-bold uppercase tracking-wider mb-2">
-            <div className="w-6 h-6 rounded-md bg-white p-0.5 inline-flex items-center justify-center">
+    <div className="space-y-6 pb-8">
+      {/* Clean White & Emerald Welcome Banner */}
+      <div className="bg-emerald-700 rounded-2xl p-6 sm:p-8 text-white border border-emerald-800 flex items-center justify-between shadow-xs">
+        <div>
+          <div className="flex items-center gap-2 text-emerald-100 text-xs font-semibold uppercase tracking-wider mb-1.5">
+            <div className="w-5 h-5 rounded bg-white p-0.5 inline-flex items-center justify-center">
               <img src={logo1} alt="Logo" className="w-full h-full object-contain" />
             </div>
             <span>Digital Farming Record Book</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            {t('welcomeBack')}, {user?.name || 'Ramesh Patil'}! 👋
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            {t('welcomeBack')}, {user?.name || 'Ramesh Patil'}!
           </h1>
-          <p className="text-sm text-khet-100 mt-1 max-w-xl font-medium">
+          <p className="text-xs text-emerald-100 mt-1 font-medium">
             {farms.length} Farms registered • {crops.length} Active Crops in season
           </p>
         </div>
-        <div className="hidden sm:block w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md p-3 border border-white/20 z-10">
-          <img src={logo1} alt="AI Khet Saathi" className="w-full h-full object-contain filter drop-shadow-md" />
+        <div className="hidden sm:block w-20 h-20 rounded-xl bg-white/10 p-2.5 border border-white/20">
+          <img src={logo1} alt="Khet Sathi" className="w-full h-full object-contain" />
         </div>
       </div>
 
@@ -107,8 +107,8 @@ export const Dashboard = () => {
       {/* Crop Last Activity Cards */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-base font-bold text-slate-800">Crop Summaries & Recent Activity</h3>
-          <Link to="/crops" className="text-xs font-extrabold text-khet-700 hover:underline flex items-center gap-1">
+          <h3 className="text-sm font-bold text-slate-800">Crop Summaries & Recent Activity</h3>
+          <Link to="/crops" className="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1">
             View All Crops <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -123,7 +123,7 @@ export const Dashboard = () => {
             return (
               <Card key={crop.id} hoverable onClick={() => navigate(`/crops/${crop.id}`)}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-khet-100 text-khet-800">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
                     🌾 {crop.name}
                   </span>
                   <span className="text-[11px] font-semibold text-slate-500">{crop.farmName}</span>
@@ -131,14 +131,14 @@ export const Dashboard = () => {
 
                 <div className="space-y-1.5 text-xs text-slate-600 mt-3">
                   <p className="flex items-center gap-1.5 font-medium">
-                    <Clock className="w-3.5 h-3.5 text-khet-600" />
+                    <Clock className="w-3.5 h-3.5 text-emerald-600" />
                     Last activity:{' '}
                     <strong className="text-slate-800 font-bold">
                       {latestAct ? `${latestAct.type} (${latestAct.date})` : 'No records yet'}
                     </strong>
                   </p>
                   <p className="flex items-center gap-1.5 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                    <Calendar className="w-3.5 h-3.5 text-slate-500" />
                     Next reminder:{' '}
                     <strong className="text-slate-800 font-bold">
                       {nextRem ? `${nextRem.reminderDate}` : 'None scheduled'}

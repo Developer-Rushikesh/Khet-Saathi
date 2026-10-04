@@ -23,7 +23,7 @@ export const LanguageSelection = () => {
     <div className="max-w-xl mx-auto space-y-6 animate-fade-in pb-12">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900">{t('language')} Selection</h1>
-        <p className="text-sm text-slate-500 font-medium">Choose your preferred language for AI Khet Saathi</p>
+        <p className="text-sm text-slate-500 font-medium">Choose your preferred language for Khet Sathi</p>
       </div>
 
       <div className="space-y-3">

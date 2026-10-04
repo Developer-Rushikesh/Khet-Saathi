@@ -38,7 +38,7 @@ export const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
     { label: t('expenses'), path: '/expenses', icon: Receipt },
     { label: t('expenseReports'), path: '/expense-reports', icon: PieChart },
     { label: t('comprehensiveReports'), path: '/reports', icon: BarChart3 },
-    { label: 'AI Khet Saathi', path: '/ai-assistant', icon: Bot, highlight: true },
+    { label: 'Khet Sathi Assistant', path: '/ai-assistant', icon: Bot, highlight: true },
     { label: t('aiHistory'), path: '/ai-history', icon: MessageSquare },
     { label: t('notifications'), path: '/notifications', icon: Bell },
     { label: t('profile'), path: '/profile', icon: User },

@@ -1,8 +1,8 @@
-# AI Khet Saathi (एआई खेत साथी)
+# Khet Sathi (खेत साथी)
 
 > **Production-Style Farmer Digital Record Book & AI Assistant Frontend**
 
-AI Khet Saathi is a responsive web application designed for farmers to maintain digital records of farming activities, crop timelines, expenses, reminders, and leverage an AI assistant for intelligent crop record analysis.
+Khet Sathi is a responsive web application designed for farmers to maintain digital records of farming activities, crop timelines, expenses, reminders, and leverage an AI assistant for intelligent crop record analysis.
 
 ---
 
@@ -14,7 +14,7 @@ AI Khet Saathi is a responsive web application designed for farmers to maintain 
 - **Crop & Farm Profitability**: Automatic calculation of **Total Expenses**, **Harvest Revenue**, and **Net Profit** per crop and per farm.
 - **Reminder System**: Track upcoming, today's, overdue, and completed reminders with one-click **Mark Done** and **Snooze 2 Days** actions.
 - **Expense Analytics**: Detailed breakdown of input costs with visual Recharts (Category Pie Chart & Crop-wise Bar Chart) and smart receipt photo upload OCR.
-- **AI Khet Saathi Assistant**: Intelligent chat assistant answering natural questions in English, Hindi, or Marathi (e.g. *"Last spray kab kiya?"*, *"Is month kya activities hui?"*, *"Soybean profit kitna hai?"*).
+- **Khet Sathi Assistant**: Intelligent chat assistant answering natural questions in English, Hindi, or Marathi (e.g. *"Last spray kab kiya?"*, *"Is month kya activities hui?"*, *"Soybean profit kitna hai?"*).
 - **"Tell Khet Saathi" Natural Activity Logger**: Type or speak natural sentences (e.g. *"Aaj subah soybean ko paani diya"*) to auto-extract activity type, crop, date, and cost for quick confirmation.
 - **Multi-Language Support (i18n)**: Switch seamlessly between **English**, **हिंदी (Hindi)**, and **मराठी (Marathi)**.
 - **Admin Command Portal**: Dedicated system oversight dashboard (`/admin`) for tracking aggregate farmers, farms, crops, system activities, and broadcasting regional advisories.

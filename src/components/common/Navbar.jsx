@@ -8,7 +8,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { Button } from './Button';
 
 export const Navbar = ({ onOpenMobileMenu }) => {
-  const { user, role, toggleRole } = useAuth();
+  const { user, role } = useAuth();
   const { lang, setLang, t } = useLanguage();
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
@@ -29,11 +29,11 @@ export const Navbar = ({ onOpenMobileMenu }) => {
 
           <Link to={role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-2.5 group">
             <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-md shadow-khet-500/10 group-hover:scale-105 transition-transform overflow-hidden">
-              <img src={logo1} alt="AI Khet Saathi Logo" className="w-full h-full object-contain" />
+              <img src={logo1} alt="Khet Sathi Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <span className="text-lg font-extrabold text-slate-900 leading-tight block tracking-tight">
-                AI Khet Saathi
+                Khet Sathi
               </span>
               <span className="text-[10px] font-semibold text-khet-600 tracking-wider uppercase block">
                 {role === 'admin' ? '• Admin Portal' : '• Farmer Assistant'}
@@ -44,20 +44,6 @@ export const Navbar = ({ onOpenMobileMenu }) => {
 
         {/* Right Tools */}
         <div className="flex items-center gap-2 sm:gap-3">
-          
-          {/* Role Switcher Badge */}
-          <button
-            onClick={toggleRole}
-            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-              role === 'admin'
-                ? 'bg-purple-100 text-purple-800 border-purple-300 hover:bg-purple-200'
-                : 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
-            }`}
-            title="Toggle between Farmer and Admin interface"
-          >
-            <Shield className="w-3.5 h-3.5" />
-            <span>{role === 'admin' ? t('admin') : t('farmer')} Mode</span>
-          </button>
 
           {/* Language Dropdown */}
           <div className="relative">

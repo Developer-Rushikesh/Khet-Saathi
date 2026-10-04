@@ -47,7 +47,7 @@ export const AIChatHistory = () => {
           <Card key={msg.id} className={msg.sender === 'user' ? 'border-l-4 border-l-khet-600' : 'border-l-4 border-l-earth-500'}>
             <div className="flex items-center justify-between text-xs font-bold mb-1">
               <span className={msg.sender === 'user' ? 'text-khet-700' : 'text-earth-700'}>
-                {msg.sender === 'user' ? '👤 Farmer Question' : '🤖 AI Khet Saathi Answer'}
+                {msg.sender === 'user' ? '👤 Farmer Question' : '🤖 Khet Sathi Answer'}
               </span>
               <span className="text-slate-400 font-medium">{msg.timestamp}</span>
             </div>

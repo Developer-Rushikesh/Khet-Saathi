@@ -33,7 +33,7 @@ export const AdminDashboard = () => {
       <div className="bg-gradient-to-r from-purple-800 to-purple-700 rounded-3xl p-6 text-white shadow-lg shadow-purple-900/15">
         <div className="flex items-center gap-2 text-purple-200 text-xs font-bold uppercase tracking-wider mb-1">
           <Shield className="w-4 h-4" />
-          <span>AI Khet Saathi • Admin Command Center</span>
+          <span>Khet Sathi • Admin Command Center</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold">System Oversight Dashboard</h1>
         <p className="text-xs text-purple-100 mt-1 font-medium">

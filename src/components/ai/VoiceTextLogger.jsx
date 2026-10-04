@@ -57,7 +57,7 @@ export const VoiceTextLogger = () => {
     <div className="bg-gradient-to-br from-earth-50 to-white border border-earth-200 rounded-2xl p-4 sm:p-5 shadow-sm">
       <div className="flex items-center gap-2.5 mb-3">
         <div className="w-9 h-9 rounded-xl bg-white border border-earth-200 p-0.5 flex items-center justify-center overflow-hidden shadow-xs">
-          <img src={logo2} alt="AI Khet Saathi" className="w-full h-full object-contain" />
+          <img src={logo2} alt="Khet Sathi" className="w-full h-full object-contain" />
         </div>
         <div>
           <h3 className="text-base font-bold text-slate-800">Tell Khet Saathi</h3>

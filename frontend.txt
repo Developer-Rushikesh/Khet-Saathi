@@ -663,10 +663,7 @@ Only complete and test the React frontend in this phase.
 
 
 
-
-crop activity me - us activity me kitne person lage 
-unke name and unke amount bhi unk sabka total amount us activity me add ho sake
-
-
-reposrt section hoga usme sara data hoga kitne farm kitne crop 
-hai kitna kharch hua kitna profit hua with filter option
+-frontend logout button not work 
+-ai khet sathi name replace to khet sathi
+-login required to access dashboard
+-multiple user create 

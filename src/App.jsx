@@ -3,12 +3,15 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
 import { Alert } from './components/common/Alert';
+import { LoadingSpinner } from './components/common/LoadingSpinner';
 
-// Auth Pages
+// Landing & Auth Pages
+import { LandingPage } from './pages/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
@@ -46,13 +49,40 @@ import { AdminActivities } from './pages/admin/AdminActivities';
 import { AdminReports } from './pages/admin/AdminReports';
 import { AdminNotifications } from './pages/admin/AdminNotifications';
 
+/**
+ * Protected Route Guard Component
+ * Ensures only authenticated users with valid role can access internal app pages.
+ */
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <LoadingSpinner message="Verifying authentication session..." />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace />;
+  }
+
+  return children;
+};
+
 const MainLayout = ({ children }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
 
-  const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
+  const isPublicPage = ['/', '/login', '/register', '/forgot-password'].includes(location.pathname);
 
-  if (isAuthPage) {
+  if (isPublicPage) {
     return <main>{children}</main>;
   }
 
@@ -73,57 +103,60 @@ const MainLayout = ({ children }) => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <LanguageProvider>
-        <NotificationProvider>
-          <BrowserRouter>
-            <MainLayout>
-              <Routes>
-                {/* Auth Routes */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
+    <ErrorBoundary>
+      <AuthProvider>
+        <LanguageProvider>
+          <NotificationProvider>
+            <BrowserRouter>
+              <MainLayout>
+                <Routes>
+                  {/* Public Landing & Auth Routes */}
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
 
-                {/* Farmer Routes */}
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/farms" element={<MyFarms />} />
-                <Route path="/farms/:farmId" element={<FarmDetails />} />
-                <Route path="/crops" element={<MyCrops />} />
-                <Route path="/crops/:cropId" element={<CropDetails />} />
-                <Route path="/add-activity" element={<AddActivity />} />
-                <Route path="/activity-history" element={<ActivityHistory />} />
-                <Route path="/activities/:activityId" element={<ActivityDetails />} />
-                <Route path="/activities/:activityId/edit" element={<EditActivity />} />
-                <Route path="/reminders" element={<Reminders />} />
-                <Route path="/add-reminder" element={<AddReminder />} />
-                <Route path="/expenses" element={<Expenses />} />
-                <Route path="/add-expense" element={<AddExpense />} />
-                <Route path="/expense-reports" element={<ExpenseReports />} />
-                <Route path="/reports" element={<ComprehensiveReports />} />
-                <Route path="/ai-assistant" element={<AIKhetSaathi />} />
-                <Route path="/ai-history" element={<AIChatHistory />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/language" element={<LanguageSelection />} />
-                <Route path="/help" element={<HelpFAQ />} />
+                  {/* Protected Farmer Routes */}
+                  <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['farmer']}><Dashboard /></ProtectedRoute>} />
+                  <Route path="/farms" element={<ProtectedRoute allowedRoles={['farmer']}><MyFarms /></ProtectedRoute>} />
+                  <Route path="/farms/:farmId" element={<ProtectedRoute allowedRoles={['farmer']}><FarmDetails /></ProtectedRoute>} />
+                  <Route path="/crops" element={<ProtectedRoute allowedRoles={['farmer']}><MyCrops /></ProtectedRoute>} />
+                  <Route path="/crops/:cropId" element={<ProtectedRoute allowedRoles={['farmer']}><CropDetails /></ProtectedRoute>} />
+                  <Route path="/add-activity" element={<ProtectedRoute allowedRoles={['farmer']}><AddActivity /></ProtectedRoute>} />
+                  <Route path="/activity-history" element={<ProtectedRoute allowedRoles={['farmer']}><ActivityHistory /></ProtectedRoute>} />
+                  <Route path="/activities/:activityId" element={<ProtectedRoute allowedRoles={['farmer']}><ActivityDetails /></ProtectedRoute>} />
+                  <Route path="/activities/:activityId/edit" element={<ProtectedRoute allowedRoles={['farmer']}><EditActivity /></ProtectedRoute>} />
+                  <Route path="/reminders" element={<ProtectedRoute allowedRoles={['farmer']}><Reminders /></ProtectedRoute>} />
+                  <Route path="/add-reminder" element={<ProtectedRoute allowedRoles={['farmer']}><AddReminder /></ProtectedRoute>} />
+                  <Route path="/expenses" element={<ProtectedRoute allowedRoles={['farmer']}><Expenses /></ProtectedRoute>} />
+                  <Route path="/add-expense" element={<ProtectedRoute allowedRoles={['farmer']}><AddExpense /></ProtectedRoute>} />
+                  <Route path="/expense-reports" element={<ProtectedRoute allowedRoles={['farmer']}><ExpenseReports /></ProtectedRoute>} />
+                  <Route path="/reports" element={<ProtectedRoute allowedRoles={['farmer']}><ComprehensiveReports /></ProtectedRoute>} />
+                  <Route path="/ai-assistant" element={<ProtectedRoute allowedRoles={['farmer']}><AIKhetSaathi /></ProtectedRoute>} />
+                  <Route path="/ai-history" element={<ProtectedRoute allowedRoles={['farmer']}><AIChatHistory /></ProtectedRoute>} />
+                  <Route path="/notifications" element={<ProtectedRoute allowedRoles={['farmer']}><Notifications /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute allowedRoles={['farmer']}><Profile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute allowedRoles={['farmer']}><Settings /></ProtectedRoute>} />
+                  <Route path="/language" element={<ProtectedRoute allowedRoles={['farmer']}><LanguageSelection /></ProtectedRoute>} />
+                  <Route path="/help" element={<ProtectedRoute allowedRoles={['farmer']}><HelpFAQ /></ProtectedRoute>} />
 
-                {/* Admin Routes */}
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/farmers" element={<AdminFarmers />} />
-                <Route path="/admin/farms" element={<AdminFarms />} />
-                <Route path="/admin/crops" element={<AdminCrops />} />
-                <Route path="/admin/activities" element={<AdminActivities />} />
-                <Route path="/admin/reports" element={<AdminReports />} />
-                <Route path="/admin/notifications" element={<AdminNotifications />} />
+                  {/* Protected Admin Routes */}
+                  <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+                  <Route path="/admin/farmers" element={<ProtectedRoute allowedRoles={['admin']}><AdminFarmers /></ProtectedRoute>} />
+                  <Route path="/admin/farms" element={<ProtectedRoute allowedRoles={['admin']}><AdminFarms /></ProtectedRoute>} />
+                  <Route path="/admin/crops" element={<ProtectedRoute allowedRoles={['admin']}><AdminCrops /></ProtectedRoute>} />
+                  <Route path="/admin/activities" element={<ProtectedRoute allowedRoles={['admin']}><AdminActivities /></ProtectedRoute>} />
+                  <Route path="/admin/reports" element={<ProtectedRoute allowedRoles={['admin']}><AdminReports /></ProtectedRoute>} />
+                  <Route path="/admin/notifications" element={<ProtectedRoute allowedRoles={['admin']}><AdminNotifications /></ProtectedRoute>} />
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </MainLayout>
-          </BrowserRouter>
-        </NotificationProvider>
-      </LanguageProvider>
-    </AuthProvider>
+                  {/* Catch-all Fallback */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </MainLayout>
+            </BrowserRouter>
+          </NotificationProvider>
+        </LanguageProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

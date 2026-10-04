@@ -1,0 +1,18 @@
+from django.contrib import admin
+from .models import AIConversation, AIMessage
+
+class AIMessageInline(admin.TabularInline):
+    model = AIMessage
+    extra = 0
+
+@admin.register(AIConversation)
+class AIConversationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'created_at', 'updated_at')
+    search_fields = ('title', 'user__email', 'user__name')
+    inlines = [AIMessageInline]
+
+@admin.register(AIMessage)
+class AIMessageAdmin(admin.ModelAdmin):
+    list_display = ('conversation', 'role', 'created_at')
+    list_filter = ('role', 'created_at')
+    search_fields = ('message', 'conversation__user__email')

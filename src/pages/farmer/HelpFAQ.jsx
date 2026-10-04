@@ -9,16 +9,16 @@ export const HelpFAQ = () => {
 
   const faqs = [
     {
-      q: "How does AI Khet Saathi help me manage multiple farms?",
+      q: "How does Khet Sathi help me manage multiple farms?",
       a: "You can create separate records for each farm (e.g. Main Farm, Riverbank Land) with area in acres or hectares. Crops, sprays, and expenses can be assigned directly to specific farms."
     },
     {
-      q: "Does AI Khet Saathi give automatic pesticide dosages?",
-      a: "No. AI Khet Saathi is a digital record book and reminder assistant. It records what products you sprayed and when, but does not dictate medical or chemical dosages."
+      q: "Does Khet Sathi give automatic pesticide dosages?",
+      a: "No. Khet Sathi is a digital record book and reminder assistant. It records what products you sprayed and when, but does not dictate medical or chemical dosages."
     },
     {
       q: "Can I use voice to enter activities?",
-      a: "Yes! Use the 'Tell Khet Saathi' box on your dashboard or AI Assistant page. Speak or type sentences like 'Aaj subah soybean ko paani diya' and AI Khet Saathi will extract the details for one-click confirmation."
+      a: "Yes! Use the 'Tell Khet Saathi' box on your dashboard or AI Assistant page. Speak or type sentences like 'Aaj subah soybean ko paani diya' and Khet Sathi will extract the details for one-click confirmation."
     },
     {
       q: "How do reminders work if I am offline?",

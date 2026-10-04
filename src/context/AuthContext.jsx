@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { realApi } from '../api/realApi';
 import { mockApi } from '../api/mockApi';
 
 const AuthContext = createContext();
@@ -10,11 +11,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem('khet_saathi_access_token');
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       try {
-        const profile = await mockApi.getProfile();
+        const profile = await realApi.getProfile();
         setUser(profile);
+        setRole(profile.role || 'farmer');
       } catch (e) {
-        console.error('Failed to load profile', e);
+        console.warn('Backend unauthenticated or token expired:', e);
+        localStorage.removeItem('khet_saathi_access_token');
+        localStorage.removeItem('khet_saathi_refresh_token');
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -22,12 +33,16 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  const login = async (mobile, password) => {
+  const login = async (mobileOrEmail, password) => {
     setLoading(true);
     try {
-      const profile = await mockApi.getProfile();
-      setUser({ ...profile, mobile });
-      return { success: true };
+      const profile = await realApi.login(mobileOrEmail, password);
+      setUser(profile);
+      setRole(profile.role || 'farmer');
+      return { success: true, user: profile };
+    } catch (e) {
+      console.error('Login error:', e);
+      return { success: false, message: e.message || 'Login failed' };
     } finally {
       setLoading(false);
     }
@@ -36,15 +51,22 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     try {
-      const updated = await mockApi.updateProfile(userData);
-      setUser(updated);
-      return { success: true };
+      const profile = await realApi.register(userData);
+      setUser(profile);
+      setRole(profile.role || 'farmer');
+      return { success: true, user: profile };
+    } catch (e) {
+      console.error('Registration error:', e);
+      return { success: false, message: e.message || 'Registration failed' };
     } finally {
       setLoading(false);
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('khet_saathi_access_token');
+    localStorage.removeItem('khet_saathi_refresh_token');
+    localStorage.removeItem('khet_saathi_user');
     setUser(null);
   };
 

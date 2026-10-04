@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    appTitle: "AI Khet Saathi",
+    appTitle: "Khet Sathi",
     subtitle: "Digital Farming Assistant & Record Book",
     farmer: "Farmer",
     admin: "Admin",
@@ -17,7 +17,7 @@ export const translations = {
     addExpense: "Add Expense",
     expenseReports: "Expense Analytics",
     comprehensiveReports: "Farm & Profit Reports",
-    aiAssistant: "AI Khet Saathi",
+    aiAssistant: "Khet Sathi Assistant",
     aiHistory: "AI Chat History",
     notifications: "Notifications",
     profile: "Profile",

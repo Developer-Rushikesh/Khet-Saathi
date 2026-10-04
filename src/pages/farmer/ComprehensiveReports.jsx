@@ -314,7 +314,7 @@ export const ComprehensiveReports = () => {
 
       {/* Printable Report Header */}
       <div className="hidden print:block border-b-2 border-slate-900 pb-4 mb-4">
-        <h1 className="text-2xl font-black text-slate-900">AI KHET SAATHI — DIGITAL FARMING REPORT</h1>
+        <h1 className="text-2xl font-black text-slate-900">KHET SATHI — DIGITAL FARMING REPORT</h1>
         <p className="text-xs font-bold text-slate-600">Generated on {new Date().toLocaleDateString()}</p>
       </div>
 
