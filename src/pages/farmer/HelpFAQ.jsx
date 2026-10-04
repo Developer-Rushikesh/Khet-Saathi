@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, PhoneCall, ChevronDown, Sprout, ShieldCheck } from 'lucide-react';
+import { HelpCircle, PhoneCall, Mail, ChevronDown, User, Code2, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Card } from '../../components/common/Card';
 
@@ -31,21 +31,54 @@ export const HelpFAQ = () => {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in pb-12">
+    <div className="max-w-2xl mx-auto space-y-6 pb-12">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900">{t('helpFaq')}</h1>
-        <p className="text-sm text-slate-500 font-medium">Frequently asked questions and helpline support</p>
+        <h1 className="text-2xl font-bold text-slate-900">{t('helpFaq')}</h1>
+        <p className="text-xs text-slate-500 font-medium">Frequently asked questions & technical developer support</p>
       </div>
 
-      {/* Helpline banner */}
-      <div className="bg-gradient-to-r from-khet-600 to-khet-500 rounded-3xl p-6 text-white shadow-md flex items-center justify-between">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-khet-200 block">Kisan Helpline & Assistance</span>
-          <h3 className="text-xl font-extrabold mt-1">1800-180-1551 (Toll Free)</h3>
-          <p className="text-xs text-khet-100 mt-1 font-medium">Available Mon-Sat 6:00 AM to 10:00 PM</p>
+      {/* Developer & Support Card */}
+      <div className="bg-emerald-800 text-white rounded-2xl p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-md text-emerald-100">
+              Lead Architect & Developer
+            </span>
+          </div>
+          <Code2 className="w-5 h-5 text-emerald-200" />
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center font-bold">
-          <PhoneCall className="w-6 h-6 text-white" />
+
+        <div>
+          <h2 className="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            <User className="w-5 h-5 text-emerald-300" /> Rushikesh Pawar
+          </h2>
+          <p className="text-xs text-emerald-100 font-medium mt-0.5">
+            Full-Stack Software Engineer • Khet Sathi Project Founder
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-emerald-700 text-xs">
+          <a
+            href="tel:+917083246105"
+            className="flex items-center gap-2.5 bg-emerald-900/60 hover:bg-emerald-900 p-2.5 rounded-xl border border-emerald-600/50 transition-colors"
+          >
+            <PhoneCall className="w-4 h-4 text-emerald-300 shrink-0" />
+            <div>
+              <span className="text-[10px] text-emerald-200 block font-semibold">Contact Number</span>
+              <span className="font-bold text-white">+91 7083246105</span>
+            </div>
+          </a>
+
+          <a
+            href="mailto:Rushikesh977@gmail.com"
+            className="flex items-center gap-2.5 bg-emerald-900/60 hover:bg-emerald-900 p-2.5 rounded-xl border border-emerald-600/50 transition-colors"
+          >
+            <Mail className="w-4 h-4 text-emerald-300 shrink-0" />
+            <div>
+              <span className="text-[10px] text-emerald-200 block font-semibold">Developer Email</span>
+              <span className="font-bold text-white">Rushikesh977@gmail.com</span>
+            </div>
+          </a>
         </div>
       </div>
 
@@ -56,8 +89,8 @@ export const HelpFAQ = () => {
           return (
             <Card key={idx} className="cursor-pointer" onClick={() => setOpenIdx(isOpen ? -1 : idx)}>
               <div className="flex items-center justify-between">
-                <h4 className="text-base font-bold text-slate-900 pr-2">{faq.q}</h4>
-                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <h4 className="text-sm font-bold text-slate-900 pr-2">{faq.q}</h4>
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </div>
               {isOpen && (
                 <p className="text-xs text-slate-600 font-medium mt-3 pt-3 border-t border-slate-100 leading-relaxed">

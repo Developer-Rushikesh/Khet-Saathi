@@ -397,21 +397,38 @@ export function LandingPage() {
             ))}
           </div>
 
-          {/* Helpdesk Banner */}
-          <div className="mt-10 bg-emerald-700 text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <PhoneCall className="w-6 h-6 text-emerald-200" />
+          {/* Helpdesk & Developer Support Banner */}
+          <div className="mt-10 bg-emerald-800 text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-emerald-700 flex items-center justify-center text-white shrink-0 font-bold border border-emerald-600">
+                <PhoneCall className="w-5 h-5 text-emerald-200" />
+              </div>
               <div>
-                <h4 className="text-sm font-bold">Kisan Helpdesk Support</h4>
-                <p className="text-xs text-emerald-100">Mon-Sat (9:00 AM to 6:00 PM)</p>
+                <div className="flex items-center gap-2">
+                  <h4 className="text-sm font-extrabold text-white">Developer & Technical Support</h4>
+                  <span className="px-2 py-0.5 bg-emerald-700 text-emerald-100 text-[10px] font-bold rounded-md">
+                    Rushikesh Pawar
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-100 mt-0.5">
+                  Direct Line: <strong>+91 7083246105</strong> • Email: <strong>Rushikesh977@gmail.com</strong>
+                </p>
               </div>
             </div>
-            <a
-              href="tel:+919876543210"
-              className="px-4 py-2 bg-white text-emerald-900 font-bold rounded-xl text-xs"
-            >
-              Call: +91 98765 43210
-            </a>
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href="tel:+917083246105"
+                className="px-4 py-2 bg-white text-emerald-900 font-extrabold rounded-xl text-xs hover:bg-emerald-50 transition-colors"
+              >
+                Call: 7083246105
+              </a>
+              <a
+                href="mailto:Rushikesh977@gmail.com"
+                className="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold rounded-xl text-xs transition-colors border border-emerald-600"
+              >
+                Email
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -419,12 +436,15 @@ export function LandingPage() {
       {/* 🏁 FOOTER */}
       <footer className="py-8 bg-white border-t border-slate-200 text-slate-600 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <img src={logo1} alt="Khet Sathi" className="w-6 h-6 object-contain" />
-            <span className="font-bold text-slate-900">Khet Sathi</span>
-            <span>© 2026 Khet Sathi. All Rights Reserved.</span>
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <div className="flex items-center gap-2">
+              <img src={logo1} alt="Khet Sathi" className="w-6 h-6 object-contain" />
+              <span className="font-bold text-slate-900">Khet Sathi</span>
+            </div>
+            <span className="hidden sm:inline">•</span>
+            <span>Architected & Developed by <strong className="text-slate-900 font-extrabold">Rushikesh Pawar</strong> (📞 +91 7083246105 | ✉️ Rushikesh977@gmail.com)</span>
           </div>
-          <div className="flex items-center gap-4 font-semibold">
+          <div className="flex items-center gap-4 font-semibold shrink-0">
             <Link to="/login" className="hover:text-emerald-700">Login</Link>
             <Link to="/register" className="hover:text-emerald-700">Register</Link>
             <a href="#about" className="hover:text-emerald-700">About</a>
