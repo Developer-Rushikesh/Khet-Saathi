@@ -105,7 +105,7 @@ In Vercel Project Settings -> 'Environment Variables':
 
 Key                      Value
 --------------------------------------------------------------------------------
-VITE_API_BASE_URL        https://khet-sathi-api.onrender.com/api
+VITE_API_BASE_URL        https://khet-saathi-sbii.onrender.com/api
 --------------------------------------------------------------------------------
 
 STEP 4: DEPLOY
